@@ -16,23 +16,61 @@ require(dplyr)
 crcdata <- crcdata %>%
   mutate(S_stakeholder_engagment_YN = ifelse(S_stakeholder_engagment_YN == "N",0,1))
 
+#fix colnames
+names(crcdata)[names(crcdata) == 'STE_IAP2_NA'] <- 'STE_IAP2_data_gathering'
+names(crcdata)[names(crcdata) == 'G_na'] <- 'G_nogeography'
 
 barplot(colSums(crcdata[,4:10]))
 
+
+#year
+barplot(table(crcdata$solution_proposed_YN))
+
+nrow(subset(crcdata, solution_proposed_YN == "1"))/nrow(subset(crcdata, solution_proposed_YN == "0"))
+
+nrow(subset(crcdata, solution_implemented_YN == "1"))/nrow(subset(crcdata, solution_implemented_YN == "0"))
+
+
+#stakeholder
+barplot(table(crcdata$S_stakeholder_engagment_YN))
+
+#year
+barplot(table(crcdata$solution_implemented_YN))
+
+#year
+barplot(table(crcdata$year))
+
+#researcher
+df <- t(t(colSums(crcdata[,12:17])))
+df <- df[order(df[,1], decreasing = TRUE),]
+barplot(df, las=2)
+
 #stakeholder types
-barplot(colSums(crcdata[,23:32]), las=2)
+df <- t(t(colSums(crcdata[,23:32])))
+df <- df[order(df[,1], decreasing = TRUE),]
+barplot(df, las=2)
 
 #ghodsvali scale
-barplot(colSums(crcdata[,33:36]), las=2)
+df <- t(t(colSums(crcdata[,33:36])))
+df <- df[order(df[,1], decreasing = TRUE),]
+barplot(df, las=2)
 
 #IAP2 scale
-barplot(colSums(crcdata[,37:43]), las=2)
+df <- t(t(colSums(crcdata[,37:43])))
+df <- df[order(df[,1], decreasing = TRUE),]
+barplot(df, las=2)
+
 
 #local scale
-barplot(colSums(crcdata[,44:51]), las=2)
+df <- t(t(colSums(crcdata[,44:51])))
+df <- df[order(df[,1], decreasing = TRUE),]
+barplot(df, las=2)
+
 
 #geography
-barplot(colSums(crcdata[,52:57]), las=2)
+df <- t(t(colSums(crcdata[,52:57])))
+df <- df[order(df[,1], decreasing = TRUE),]
+barplot(df, las=2)
 
 
 ggplot(crcdata,aes(x=solution_proposed_YN, fill=year)) + 
@@ -44,11 +82,29 @@ ggplot(crcdata,aes(x=solution_implemented_YN, fill=year)) +
 ggplot(crcdata,aes(x=S_model_YN, fill=year)) + 
   geom_bar(stat = "count", position = "dodge") 
   
-
-
-ggplot(as.data.frame(crcdata), aes(factor(year), Freq, fill = Species)) +     
-  geom_col(position = 'dodge')
-
-
-ggplot(data=crcdata, aes(x=S_policy)) +
+# 
+# 
+# ggplot(as.data.frame(crcdata), aes(factor(year), Freq, fill = S_social)) +     
+#   geom_col(position = 'dodge')
+# 
+# 
+# ggplot(data=crcdata, aes(x=S_tech)) +
+#   geom_bar()
+# 
+# ggplot(data=crcdata, aes(x=S_policy)) +
+#   geom_bar()
+# 
+# ggplot(data=crcdata, aes(x=S_institutional)) +
+#   geom_bar()
+# 
+# ggplot(data=crcdata, aes(x=S_social)) +
+#   geom_bar()
+# 
+# ggplot(data=crcdata, aes(x=S_economic)) +
+#   geom_bar()
+# 
+# ggplot(data=crcdata, aes(x=S_ecological)) +
+#   geom_bar()
+# 
+# ggplot(data=crcdata, aes(x=S_educational)) +
   geom_bar()
