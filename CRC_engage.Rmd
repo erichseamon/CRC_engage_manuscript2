@@ -11,13 +11,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## CRC Engage Summary
+# CRC Engage Summary
 
 CRC Engage Summary Statement
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 library(ggplot2)
+library(epiDisplay)
 
 crcdata <- read.csv("./data/crc_data_ES2.csv")
 
@@ -41,12 +42,16 @@ names(crcdata)[names(crcdata) == 'G_na'] <- 'G_nogeography'
 
 ```
 
+# Proposed Solution Papers
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(crcdata,aes(x=solution_proposed_YN, fill=year)) + ggtitle("Solution Proposed: Y=18") +
   geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()
 
 ```
+\newpage
+
+# Implemented Solution Papers
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -54,21 +59,27 @@ ggplot(crcdata,aes(x=solution_implemented_YN, fill=year)) + ggtitle("Solution Im
   geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()
 
 ```
+\newpage
 
+# Solution Types
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 par(mar = c(8,4,4,4))
 barplot(colSums(crcdata[,4:10]), las=2, main="Solution Types: N=18")
 
 ```
+\newpage
 
+# Computational Model Used
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(crcdata,aes(x=S_model_YN, fill=year)) + ggtitle("Computational Model Used: Y=366") +
   geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()
  
 ``` 
+\newpage
 
+# Stakeholder Engagement
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -82,14 +93,124 @@ par(mar = c(4,4,4,4))
 barplot(table(crcdata$S_stakeholder_engagment_YN), main = "Stakeholder Engagment: N=92")
 
 ```
+\newpage
 
+# All FEWS papers by year
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
-barplot(table(crcdata$year), main="Year")
+ggplot(crcdata, aes(x=year)) + 
+    geom_bar(stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata$year)
+
+```
+\newpage
+
+# Level of Stakeholder Engagement by Year - Ghodsvali
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+library(dplyr)
+
+crcdata_new <- crcdata %>% 
+  mutate(ghodsvali = sprintf("%d_%d_%d_%d", STE_G_nominal, STE_G_instrumental, STE_G_representation, STE_G_transformative))
+
+crcdata_new <- crcdata_new[!(crcdata_new$ghodsvali %in% "0_0_0_0"),]
+
+library(dplyr)
+crcdata_new <- crcdata_new %>%
+    mutate(ghodsvali = recode(ghodsvali, '0_0_0_0' = 'none', '1_0_0_0' = 'nominal', '0_1_0_0' =  'instrumental', '0_0_1_0' = 'representation',  '0_0_0_1' = 'transformative' ))
+
+ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
+
+
+```
+\newpage
+
+# Level of Stakeholder Engagement by Year - IAP2
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+library(dplyr)
+
+crcdata_new <- crcdata %>% 
+  mutate(IAP2 = sprintf("%d_%d_%d_%d_%d_%d", STE_IAP2_data_gathering,STE_IAP2_inform,STE_IAP2_consult,STE_IAP2_involve,STE_IAP2_collab,STE_IAP2_empower))
+
+crcdata_new <- crcdata_new[!(crcdata_new$IAP2 %in% "0_0_0_0_0_0"),]
+
+library(dplyr)
+crcdata_new <- crcdata_new %>%
+    mutate(IAP2 = recode(IAP2, '1_0_0_0_0_0' = 'data gathering', '0_1_0_0_0_0' = 'inform', '0_0_1_0_0_0' =  'consult', '0_0_0_1_0_0' = 'involve',  '0_0_0_0_1_0' = 'collab', '0_0_0_0_0_1' =  'empower'))
+
+ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
+
 
 ```
 
+\newpage
+
+# Level of Stakeholder Engagement by Year - local
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+library(dplyr)
+
+crcdata_new <- crcdata %>% 
+  mutate(local = sprintf("%d_%d_%d_%d_%d_%d_%d_%d", SC_datagathering,SC_inform,SC_perspectives,SC_plan,SC_identify,SC_envision,SC_implement,SC_notdescribed))
+
+
+crcdata_new <- crcdata_new[!(crcdata_new$local %in% "0_0_0_0_0_0_0_0"),]
+
+library(dplyr)
+crcdata_new <- crcdata_new %>%
+    mutate(local = recode(local, '1_0_0_0_0_0_0_0' = 'data gathering', '0_1_0_0_0_0_0_0' = 'inform', '0_0_1_0_0_0_0_0' =  'perspectives', '0_0_0_1_0_0_0_0' = 'plan',  '0_0_0_0_1_0_0_0' = 'identify', '0_0_0_0_0_1_0_0' =  'envision',  '0_0_0_0_0_0_1_0' = 'implement', '0_0_0_0_0_0_0_1' =  'not described'))
+
+ggplot(crcdata_new, aes(fill=local, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
+
+
+```
+\newpage
+
+# stakeholder engagement by year
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+library(dplyr)
+crcdata_st <- read.csv("./data/crc_data_ES2.csv")
+
+ggplot(crcdata_st, aes(fill=S_stakeholder_engagment_YN, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_st$year)
+
+
+```
+
+\newpage
+
+# Level of Stakeholder Engagement by Year - local
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+library(dplyr)
+
+crcdata_new <- crcdata %>% 
+  mutate(IAP2 = sprintf("%d_%d_%d_%d_%d_%d_%d", STE_IAP2_data_gathering,STE_IAP2_inform,STE_IAP2_consult,STE_IAP2_involve,STE_IAP2_collab,STE_IAP2_empower,STE_IAP2_researcher))
+
+crcdata_new <- crcdata_new[!(crcdata_new$IAP2 %in% "0_0_0_0_0_0_0"),]
+
+library(dplyr)
+crcdata_new <- crcdata_new %>%
+    mutate(IAP2 = recode(IAP2, '1_0_0_0_0_0_0' = 'data gathering', '0_1_0_0_0_0_0' = 'inform', '0_0_1_0_0_0_0' =  'consult', '0_0_0_1_0_0_0' = 'involve',  '0_0_0_0_1_0_0' = 'collab', '0_0_0_0_0_1_0' =  'empower', '0_0_0_0_0_0_1' = 'researcher'))
+
+ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
+
+
+```
+\newpage
+
+# Researcher Types
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #researcher
 df <- t(t(colSums(crcdata[,12:17])))
@@ -98,6 +219,9 @@ par(mar = c(6,4,4,4))
 barplot(df, las=2, main = "Researcher Types")
 
 ```
+\newpage
+
+# Stakeholder Types
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -108,6 +232,9 @@ par(mar = c(11,4,4,4))
 barplot(df, las=2, main = "Stakeholder Types")
 
 ```
+\newpage
+
+# Ghodsvali Scale Breakdown
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -117,6 +244,9 @@ df <- df[order(df[,1], decreasing = TRUE),]
 barplot(df, las=2, main="Ghodsvali Scale Breakdown")
 
 ```
+\newpage
+
+# IAP2 Scale Breakdown
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -127,6 +257,9 @@ par(mar = c(12,4,4,4))
 barplot(df, las=2, main = "IAP2 Scale Breakdown")
 
 ```
+\newpage
+
+# Local Scale Breakdown
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -137,6 +270,9 @@ par(mar = c(9,4,4,4))
 barplot(df, las=2, main="Local Scale Breakdown")
 
 ```
+\newpage
+
+# Geographic Location Breakdown
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -148,18 +284,245 @@ barplot(df, las=2, main="Geographic Location Breakdown")
 
 ```
 
+
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #Odds of stakeholder scale predicting whether a solution was proposed or not
 
 ghodsvali.fit<-glm(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,family=binomial,data=crcdata)
 IAP2.fit<-glm(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower+STE_IAP2_researcher,family=binomial,data=crcdata)
-IAP2.fit<-glm(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower+STE_IAP2_researcher,family=binomial,data=crcdata)
+
 local.fit<-glm(solution_proposed_YN ~SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement+SC_notdescribed,family=binomial,data=crcdata)
 
+```
+
+\newpage
+
+# Ghodsvali - Odds of stakeholder scale predicting whether a solution was proposed or not
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+summary(ghodsvali.fit)
+logistic.display(ghodsvali.fit)
+
+
+```
+
+\newpage
+
+# IAP2 - Odds of stakeholder scale predicting whether a solution was proposed or not
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+summary(IAP2.fit)
+logistic.display(IAP2.fit)
+
+
+```
+
+\newpage
+
+# Local - Odds of stakeholder scale predicting whether a solution was proposed or not
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+summary(local.fit)
+logistic.display(local.fit)
 
 
 ```
 
 
+\newpage
 
+# Engagement vs. solutation
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#engagement of stakeholders vs. solutions
+
+stakeholder_vs_solutions <-glm(solution_proposed_YN ~S_stakeholder_engagment_YN,family=binomial,data=crcdata)
+
+summary(stakeholder_vs_solutions)
+logistic.display(stakeholder_vs_solutions)
+
+```
+\newpage
+
+# Use of computational model vs. solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Use of computational model vs. solutions
+
+model_vs_solutions <-glm(solution_proposed_YN ~S_model_YN,family=binomial,data=crcdata)
+
+summary(model_vs_solutions)
+logistic.display(model_vs_solutions)
+
+```
+\newpage
+
+# Diversity of stakeholders vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+crcdata$ST_ratio <- rowSums(crcdata[,23:32])/10
+
+stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
+
+summary(stratio_vs_solutions)
+logistic.display(stratio_vs_solutions)
+
+```
+\newpage
+
+# Diversity of Researchers vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of researchers vs solutions (using ratio)
+
+
+crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
+
+rratio_vs_solutions <-glm(solution_proposed_YN ~ R_ratio,family=binomial,data=crcdata)
+
+summary(rratio_vs_solutions)
+logistic.display(rratio_vs_solutions)
+
+```
+\newpage
+
+# Stakeholder type vs level of engagement (Ghodsvali)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#stakeholder type vs level of engagement ghodsvali
+
+ST_engagement<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,data=crcdata)
+
+summary(ST_engagement)
+
+
+```
+<!-- \newpage -->
+<!-- ## Stakeholder type vs level of engagement (Ghodsvali) -->
+<!-- ) -->
+<!-- ```{r echo=FALSE, warning=FALSE, message=FALSE} -->
+
+<!-- #stakeholder type vs level of engagement ghodsvali -->
+
+<!-- ST_engagement_ghodsvali<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,data=crcdata) -->
+
+
+<!-- ``` -->
+
+\newpage
+
+# Stakeholder type vs level of engagement (IAP2)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#stakeholder type vs level of engagement IAP2
+
+ST_engagement_IAP2<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower+STE_IAP2_researcher,data=crcdata)
+
+summary(ST_engagement_IAP2)
+
+```
+
+\newpage
+
+# Stakeholder type vs level of engagement (local)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#stakeholder type vs level of engagement local
+
+ST_engagement_IAP2<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement+SC_notdescribed,data=crcdata)
+
+summary(ST_engagement_IAP2)
+
+
+```
+
+\newpage
+
+# Stakeholder type vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#stakeholder type vs solution
+
+ST_solution <- glm(solution_proposed_YN~ST_farmers+ST_combined_gov+ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts, family=binomial, data=crcdata)
+
+summary(ST_solution)
+
+```
+
+\newpage
+
+# Geographic area vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+geog_solution <- glm(solution_proposed_YN~G_local+G_regional+G_national+G_multination+G_global, family=binomial, data=crcdata)
+summary(geog_solution)
+logistic.display(geog_solution)
+
+
+```
+
+\newpage
+
+# stakeholder type vs geographic area
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+geog_stakeholdertype <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~G_local+G_regional+G_national+G_multination+G_global, data=crcdata)
+
+summary(geog_stakeholdertype)
+
+```
+
+\newpage
+
+# Geographic area vs engagment (Ghodsvali)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+geog_engagment_ghodsvali <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
+
+summary(geog_engagment_ghodsvali)
+
+```
+\newpage
+
+# Geographic area vs engagment (IAP2)
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+
+geog_engagment_IAP2 <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower+STE_IAP2_researcher, data=crcdata)
+
+summary(geog_engagment_IAP2)
+
+```
+\newpage
+
+# Geographic area vs engagment (local)
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+
+geog_engagment_local <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement+SC_notdescribed, data=crcdata)
+
+summary(geog_engagment_local)
+
+```
