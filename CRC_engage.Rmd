@@ -460,6 +460,7 @@ logistic.display(model_vs_solutions)
 
 ## Diversity of stakeholders vs solution
 
+
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #Diversity of stakeholders vs solutions (using ratio)
@@ -473,6 +474,24 @@ logistic.display(stratio_vs_solutions)
 
 ```
 \newpage
+
+## Interdisciplinary Researchers vs Solution
+
+In order to accurately reflect diversity of researchers, we run a binomial logistic regression of the interdisciplinary researchers category to assess predictability on stakeholder solution (Y/N).
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of researchers vs solutions (using ratio)
+
+
+crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
+
+rratio_vs_solutions <-glm(solution_proposed_YN ~ R_interdis,family=binomial,data=crcdata)
+
+summary(rratio_vs_solutions)
+logistic.display(rratio_vs_solutions)
+
+```
 
 ## Diversity of Researchers vs solution
 
