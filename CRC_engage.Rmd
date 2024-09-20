@@ -3,13 +3,16 @@ title: "CRC Engage"
 author: "Erich Seamon"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
-  html_document: default
+  pdf_document:
+    toc: yes
+
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+\newpage
 
 # CRC Engage Summary
 
@@ -42,7 +45,93 @@ names(crcdata)[names(crcdata) == 'G_na'] <- 'G_nogeography'
 
 ```
 
-# Proposed Solution Papers
+\newpage
+
+# Chi Square Tests
+
+## Comparing categorical independence
+
+For more info on this topic see:
+
+Kim HY. Statistical notes for clinical researchers: Chi-squared test and Fisher's exact test. Restor Dent Endod. 2017 May;42(2):152-155. doi: 10.5395/rde.2017.42.2.152. Epub 2017 Mar 30. PMID: 28503482; PMCID: PMC5426219.
+
+
+## Chi Square - Solution vs. Stakeholder Engagement
+
+Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory, and engaged stakeholder/did not engage stakeholder as the response.
+
+Both chi square and fishers exact test were significant, with a chi square approximation of ~44, which is well above the critical value (3.84 for one degree of freedom).  Fishers exact test returned an odds ratio of ~18. The alternative hypothesis: true odds ratio is not equal to 1. Null is rejected. The groups are not independent.
+
+The FET defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is 18.25 times that for an engaged stakeholder".  You could flip the response and explanatory, but the odds ratio would stay the same.
+
+
+```{r, echo=FALSE}
+library(Barnard)
+
+solution_stakeholder <- 
+  as.matrix(
+    read.table(text=
+                 "  E     NE           
+      S             14    4      
+      NS            76    400",
+               header=TRUE,
+               row.names=1)
+  )
+
+names(dimnames(solution_stakeholder)) <- c('solution','stakeholder')
+solution_stakeholder
+
+solution_stakeholder <- as.table(solution_stakeholder)
+
+summary(solution_stakeholder)
+
+fisher.test(solution_stakeholder)
+
+barnard.test(14,4,76,400)
+
+
+```
+
+\newpage
+
+## Chi Square - Solution vs. Model 
+
+Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory, and Model/No Model as the response.
+
+Both chi square and fishers exact test were insignificant/borderline, with a chi square approximation of ~3.7, which is below to the critical value (3.84 for one degree of freedom).  Fishers exact test returned an odds ratio of under 1. Null is accepted. The groups are independent.
+
+The FET defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is .39 times that for having a model".  You could flip the response and explanatory, but the odds ratio would stay the same.
+
+```{r, echo=FALSE}
+library(Barnard)
+
+solution_model <- 
+  as.matrix(
+    read.table(text=
+                 "  M     NM      
+      S             11    7      
+      NS            377   94",
+               header=TRUE,
+               row.names=1)
+  )
+
+names(dimnames(solution_model)) <- c('solution','model')
+solution_model
+
+solution_model <- as.table(solution_model)
+
+summary(solution_model)
+
+fisher.test(solution_model)
+
+barnard.test(11,7,377,94)
+```
+
+\newpage
+
+# Graphs
+
+## Proposed Solution Papers
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(crcdata,aes(x=solution_proposed_YN, fill=year)) + ggtitle("Solution Proposed: Y=18") +
@@ -51,7 +140,7 @@ ggplot(crcdata,aes(x=solution_proposed_YN, fill=year)) + ggtitle("Solution Propo
 ```
 \newpage
 
-# Implemented Solution Papers
+## Implemented Solution Papers
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -61,7 +150,7 @@ ggplot(crcdata,aes(x=solution_implemented_YN, fill=year)) + ggtitle("Solution Im
 ```
 \newpage
 
-# Solution Types
+## Solution Types
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 par(mar = c(8,4,4,4))
@@ -70,7 +159,7 @@ barplot(colSums(crcdata[,4:10]), las=2, main="Solution Types: N=18")
 ```
 \newpage
 
-# Computational Model Used
+## Computational Model Used
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(crcdata,aes(x=S_model_YN, fill=year)) + ggtitle("Computational Model Used: Y=366") +
@@ -79,7 +168,7 @@ ggplot(crcdata,aes(x=S_model_YN, fill=year)) + ggtitle("Computational Model Used
 ``` 
 \newpage
 
-# Stakeholder Engagement
+## Stakeholder Engagement
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -95,7 +184,7 @@ barplot(table(crcdata$S_stakeholder_engagment_YN), main = "Stakeholder Engagment
 ```
 \newpage
 
-# All FEWS papers by year
+## All FEWS Papers by Year
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
@@ -105,7 +194,7 @@ ggplot(crcdata, aes(x=year)) +
 ```
 \newpage
 
-# Level of Stakeholder Engagement by Year - Ghodsvali
+## Level of Stakeholder Engagement by Year - Ghodsvali
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
@@ -127,7 +216,7 @@ ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) +
 ```
 \newpage
 
-# Level of Stakeholder Engagement by Year - IAP2
+## Level of Stakeholder Engagement by Year - IAP2
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
@@ -150,7 +239,7 @@ ggplot(crcdata_new, aes(fill=IAP2, x=year)) +
 
 \newpage
 
-# Level of Stakeholder Engagement by Year - local
+## Level of Stakeholder Engagement by Year - Local
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
@@ -173,7 +262,7 @@ ggplot(crcdata_new, aes(fill=local, x=year)) +
 ```
 \newpage
 
-# stakeholder engagement by year
+## Stakeholder Engagement by Year
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
@@ -188,7 +277,7 @@ ggplot(crcdata_st, aes(fill=S_stakeholder_engagment_YN, x=year)) +
 
 \newpage
 
-# Level of Stakeholder Engagement by Year - local
+## Level of Stakeholder Engagement by Year - Local
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
@@ -210,7 +299,7 @@ ggplot(crcdata_new, aes(fill=IAP2, x=year)) +
 ```
 \newpage
 
-# Researcher Types
+## Researcher Types
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #researcher
 df <- t(t(colSums(crcdata[,12:17])))
@@ -221,7 +310,7 @@ barplot(df, las=2, main = "Researcher Types")
 ```
 \newpage
 
-# Stakeholder Types
+## Stakeholder Types
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -234,7 +323,7 @@ barplot(df, las=2, main = "Stakeholder Types")
 ```
 \newpage
 
-# Ghodsvali Scale Breakdown
+## Ghodsvali Scale Breakdown
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -246,7 +335,7 @@ barplot(df, las=2, main="Ghodsvali Scale Breakdown")
 ```
 \newpage
 
-# IAP2 Scale Breakdown
+## IAP2 Scale Breakdown
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -259,7 +348,7 @@ barplot(df, las=2, main = "IAP2 Scale Breakdown")
 ```
 \newpage
 
-# Local Scale Breakdown
+## Local Scale Breakdown
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -272,7 +361,7 @@ barplot(df, las=2, main="Local Scale Breakdown")
 ```
 \newpage
 
-# Geographic Location Breakdown
+## Geographic Location Breakdown
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -297,8 +386,11 @@ local.fit<-glm(solution_proposed_YN ~SC_datagathering+SC_inform+SC_perspectives+
 ```
 
 \newpage
+# Regression Testing
 
-# Ghodsvali - Odds of stakeholder scale predicting whether a solution was proposed or not
+## Ghodsvali
+
+Odds of stakeholder scale predicting whether a solution was proposed or not
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -310,7 +402,9 @@ logistic.display(ghodsvali.fit)
 
 \newpage
 
-# IAP2 - Odds of stakeholder scale predicting whether a solution was proposed or not
+## IAP2
+
+Odds of stakeholder scale predicting whether a solution was proposed or not
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -322,7 +416,9 @@ logistic.display(IAP2.fit)
 
 \newpage
 
-# Local - Odds of stakeholder scale predicting whether a solution was proposed or not
+## Local
+
+Odds of stakeholder scale predicting whether a solution was proposed or not
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 summary(local.fit)
@@ -334,7 +430,7 @@ logistic.display(local.fit)
 
 \newpage
 
-# Engagement vs. solutation
+## Engagement vs. solution
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -348,7 +444,7 @@ logistic.display(stakeholder_vs_solutions)
 ```
 \newpage
 
-# Use of computational model vs. solution
+## Use of computational model vs. solution
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -362,7 +458,7 @@ logistic.display(model_vs_solutions)
 ```
 \newpage
 
-# Diversity of stakeholders vs solution
+## Diversity of stakeholders vs solution
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -378,7 +474,7 @@ logistic.display(stratio_vs_solutions)
 ```
 \newpage
 
-# Diversity of Researchers vs solution
+## Diversity of Researchers vs solution
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -395,7 +491,7 @@ logistic.display(rratio_vs_solutions)
 ```
 \newpage
 
-# Stakeholder type vs level of engagement (Ghodsvali)
+## Stakeholder type vs level of engagement (Ghodsvali)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -421,7 +517,7 @@ summary(ST_engagement)
 
 \newpage
 
-# Stakeholder type vs level of engagement (IAP2)
+## Stakeholder type vs level of engagement (IAP2)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -435,7 +531,7 @@ summary(ST_engagement_IAP2)
 
 \newpage
 
-# Stakeholder type vs level of engagement (local)
+## Stakeholder type vs level of engagement (local)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -450,7 +546,7 @@ summary(ST_engagement_IAP2)
 
 \newpage
 
-# Stakeholder type vs solution
+## Stakeholder type vs solution
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -464,7 +560,7 @@ summary(ST_solution)
 
 \newpage
 
-# Geographic area vs solution
+## Geographic area vs solution
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -479,7 +575,7 @@ logistic.display(geog_solution)
 
 \newpage
 
-# stakeholder type vs geographic area
+## stakeholder type vs geographic area
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -493,35 +589,35 @@ summary(geog_stakeholdertype)
 
 \newpage
 
-# Geographic area vs engagment (Ghodsvali)
+## Geographic area vs engagment (Ghodsvali)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #geographic area vs solution
 
-geog_engagment_ghodsvali <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
+geog_engagment_ghodsvali <- lm(cbind(G_local,G_regional,G_national,G_multination,G_global)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
 
 summary(geog_engagment_ghodsvali)
 
 ```
 \newpage
 
-# Geographic area vs engagment (IAP2)
+## Geographic area vs engagment (IAP2)
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 
-geog_engagment_IAP2 <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower+STE_IAP2_researcher, data=crcdata)
+geog_engagment_IAP2 <- lm(cbind(G_local,G_regional,G_national,G_multination,G_global)~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower+STE_IAP2_researcher, data=crcdata)
 
 summary(geog_engagment_IAP2)
 
 ```
 \newpage
 
-# Geographic area vs engagment (local)
+## Geographic area vs engagment (local)
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 
-geog_engagment_local <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement+SC_notdescribed, data=crcdata)
+geog_engagment_local <- lm(cbind(G_local,G_regional,G_national,G_multination,G_global)~SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement+SC_notdescribed, data=crcdata)
 
 summary(geog_engagment_local)
 
