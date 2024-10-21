@@ -51,15 +51,13 @@ names(crcdata)[43] <- "SC_researcher"
 # Chi-Square Testing
 ## Chi Square Testing: Solution vs. Stakeholder Engagement
 
-Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory, and engaged stakeholder/did not engage stakeholder as the response.
+Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory, and engaged stakeholder/did not engage stakeholder as the response. 
 
-Both chi square and fishers exact test were significant, with a chi square approximation of ~44, which is well above the critical value (3.84 for one degree of freedom).  Fishers exact test returned an odds ratio of ~18. The alternative hypothesis: true odds ratio is not equal to 1. Null is rejected. The groups are not independent.
+**ChiSquare = 26: Fishers Exact Test Odds Ratio: 10: Not Independent**
 
-The FET defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is 18.25 times that for an engaged stakeholder".  You could flip the response and explanatory, but the odds ratio would stay the same.
+Both chi square and fishers exact test were significant, with a chi square approximation of ~26, which is well above the critical value (3.84 for one degree of freedom).  Fishers Exact Test returned an odds ratio of ~10. The alternative hypothesis: true odds ratio is not equal to 1. Null is rejected. The groups are not independent. The Fishers Exact Test defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is 10 times that for an engaged stakeholder".  You could flip the response and explanatory, but the odds ratio would stay the same.
 
-For more info on this topic see:
-
-Kim HY. Statistical notes for clinical researchers: Chi-squared test and Fisher's exact test. Restor Dent Endod. 2017 May;42(2):152-155. doi: 10.5395/rde.2017.42.2.152. Epub 2017 Mar 30. PMID: 28503482; PMCID: PMC5426219.
+For more info on this topic see: Kim HY. Statistical notes for clinical researchers: Chi-squared test and Fisher's exact test. Restor Dent Endod. 2017 May;42(2):152-155. doi: 10.5395/rde.2017.42.2.152. Epub 2017 Mar 30. PMID: 28503482; PMCID: PMC5426219.
 
 
 ```{r, echo=FALSE}
@@ -114,9 +112,11 @@ barnard.test(13,5,95,370)
 
 Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory, and Model/No Model as the response.
 
-Both chi square and fishers exact test were insignificant/borderline, with a chi square approximation of ~3.7, which is below to the critical value (3.84 for one degree of freedom).  Fishers exact test returned an odds ratio of under 1. Null is accepted. The groups are independent.
+**ChiSquare = .57: Fishers Exact Test Odds Ratio = .668: Independent**
 
-The FET defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is .39 times that for having a model".  You could flip the response and explanatory, but the odds ratio would stay the same.
+Both chi square and fishers exact test were insignificant/borderline, with a chi square approximation of ~.57, which is well below to the critical value (3.84 for one degree of freedom).  Fishers exact test returned an odds ratio of under 1. Null is accepted. The groups are independent.
+
+The FET defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is .67 times that for having a model".  You could flip the response and explanatory, but the odds ratio would stay the same.
 
 ```{r, echo=FALSE}
 library(Barnard)
