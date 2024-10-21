@@ -16,7 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # CRC Engage Summary
 
-We conducted two literature searches: an initial search in 2020 and a follow-up search in 2023 to capture literature published between 2020 and 2023. We conducted the searches in two different online databases, ScienceDirect and WorldCat, to ensure a comprehensive identification of relevant literature. We identified 177 publications from our initial search and 540 publications in our follow up search, resulting in a total of 717 publications. We then manually screened the papers and removed additional papers that did not meet the criteria above on reading the manuscript, resulting in 489 total papers for analysis.
+CRC Engage Summary Statement
+
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 library(ggplot2)
@@ -48,18 +49,22 @@ names(crcdata)[43] <- "SC_researcher"
 
 \newpage
 
-# Chi-Square Testing
-## Chi Square Testing: Solution vs. Stakeholder Engagement
+# Chi Square Tests
+
+## Comparing categorical independence
+
+For more info on this topic see:
+
+Kim HY. Statistical notes for clinical researchers: Chi-squared test and Fisher's exact test. Restor Dent Endod. 2017 May;42(2):152-155. doi: 10.5395/rde.2017.42.2.152. Epub 2017 Mar 30. PMID: 28503482; PMCID: PMC5426219.
+
+
+## Chi Square - Solution vs. Stakeholder Engagement
 
 Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory, and engaged stakeholder/did not engage stakeholder as the response.
 
 Both chi square and fishers exact test were significant, with a chi square approximation of ~44, which is well above the critical value (3.84 for one degree of freedom).  Fishers exact test returned an odds ratio of ~18. The alternative hypothesis: true odds ratio is not equal to 1. Null is rejected. The groups are not independent.
 
 The FET defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is 18.25 times that for an engaged stakeholder".  You could flip the response and explanatory, but the odds ratio would stay the same.
-
-For more info on this topic see:
-
-Kim HY. Statistical notes for clinical researchers: Chi-squared test and Fisher's exact test. Restor Dent Endod. 2017 May;42(2):152-155. doi: 10.5395/rde.2017.42.2.152. Epub 2017 Mar 30. PMID: 28503482; PMCID: PMC5426219.
 
 
 ```{r, echo=FALSE}
@@ -77,21 +82,19 @@ levels(crcdata$solution_implemented_YN) = c("N", "Y")
 crcdata_table <- table(crcdata$solution_proposed_YN, crcdata$S_model_YN)
 colnames(crcdata_table) <- c("M", "NM")
 
-#custom add
-crcdata_table <- rbind(crcdata_table[2,], crcdata_table[1,])
-crcdata_table[1,] <- rev(crcdata_table[1,])
-
 solution_stakeholder <- crcdata_table
 
- # solution_stakeholder <- 
- #   as.matrix(
- #     read.table(text=
- #                  "  E     NE           
- #       S             14    4      
- #       NS            76    400",
- #                header=TRUE,
- #                row.names=1)
- #   )
+
+
+# solution_stakeholder <- 
+#   as.matrix(
+#     read.table(text=
+#                  "  E     NE           
+#       S             14    4      
+#       NS            76    400",
+#                header=TRUE,
+#                row.names=1)
+#   )
 
 names(dimnames(solution_stakeholder)) <- c('solution','stakeholder')
 solution_stakeholder
@@ -104,13 +107,13 @@ fisher.test(solution_stakeholder)
 
 btest <- c(solution_stakeholder[1,1:2], solution_stakeholder[2,1:2])
 
-barnard.test(13,5,95,370)
+barnard.test(14,4,78,387)
 
 ```
 
 \newpage
 
-## Chi Square Testing: Solution Proposed or not vs. Computational Model Used or not? 
+## Chi Square - Solution vs. Model 
 
 Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory, and Model/No Model as the response.
 
@@ -128,23 +131,21 @@ crcdata$S_model_YN <- factor(crcdata$S_model_YN, levels = c("Y", "N"))
 crcdata_table <- table(crcdata$solution_proposed_YN, crcdata$S_model_YN)
 colnames(crcdata_table) <- c("M", "NM")
 
-crcdata_table <- rbind(crcdata_table[2,], crcdata_table[1,])
-#crcdata_table[2,] <- rev(crcdata_table[2,])
 
 
 solution_model <- 
  crcdata_table
 
- 
- # solution_model <- 
- #   as.matrix(
- #     read.table(text=
- #                  "  M     NM      
- #       S             11    7      
- #       NS            377   94",
- #                header=TRUE,
- #                row.names=1)
- #   )
+# 
+# solution_model <- 
+#   as.matrix(
+#     read.table(text=
+#                  "  M     NM      
+#       S             11    7      
+#       NS            377   94",
+#                header=TRUE,
+#                row.names=1)
+#   )
 
 names(dimnames(solution_model)) <- c('solution','model')
 solution_model
@@ -162,29 +163,25 @@ barnard.test(13,5,370,95)
 
 # Graphs
 
-## Were Solutions Proposed in the metaset of papers?
+## Proposed Solution Papers
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(crcdata,aes(x=solution_proposed_YN, fill=year)) + ggtitle("Solution Proposed: Y=18") + labs(x="Was a solution proposed?") +
-  geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal() + theme_minimal()+
-  theme(text = element_text(size = 20),
-        axis.text.x = element_text(angle = 0, hjust = 1)) 
+  geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()
 
 ```
 \newpage
 
-## Were Solutions Implemented in the metaset of papers?
+## Implemented Solution Papers
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-ggplot(crcdata,aes(x=solution_implemented_YN, fill=year)) + ggtitle("Solution Implemented: Y=11") + labs(x="Was a solution implemented?") + geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()+
-  theme(text = element_text(size = 20),
-        axis.text.x = element_text(angle = 0, hjust = 1)) 
+ggplot(crcdata,aes(x=solution_implemented_YN, fill=year)) + ggtitle("Solution Implemented: Y=11") + labs(x="Was a solution implemented?") + geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()
 
 ```
 \newpage
 
-## What were the solution types?
+## Solution Types
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 # par(mar = c(8,4,4,4))
@@ -202,7 +199,7 @@ ggplot(p3a, aes(x=group, y=plot3_data)) + geom_bar(stat="identity",fill="gray", 
 ```
 \newpage
 
-## Was a computational model used?
+## Computational Model Used
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(crcdata,aes(x=S_model_YN, fill=year)) + ggtitle("Computational Model Used: Y=366") + labs(x="Was a computational model used?") +
@@ -211,7 +208,7 @@ ggplot(crcdata,aes(x=S_model_YN, fill=year)) + ggtitle("Computational Model Used
 ``` 
 \newpage
 
-## Were Stakeholders engaged?
+## Stakeholder Engagement
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -221,11 +218,8 @@ ggplot(crcdata,aes(x=S_model_YN, fill=year)) + ggtitle("Computational Model Used
 
 
 #stakeholder
-#par(mar = c(4,4,4,4))
-#barplot(table(crcdata$S_stakeholder_engagment_YN), main = "Stakeholder Engagment: Y=92")
-
-ggplot(crcdata,aes(x=S_stakeholder_engagment_YN, fill=year)) + ggtitle("Stakeholder Engagement: YES=92") + labs(x="Were stakeholders engaged?") +
-  geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()
+par(mar = c(4,4,4,4))
+barplot(table(crcdata$S_stakeholder_engagment_YN), main = "Stakeholder Engagment: N=92")
 
 ```
 \newpage
@@ -234,14 +228,17 @@ ggplot(crcdata,aes(x=S_stakeholder_engagment_YN, fill=year)) + ggtitle("Stakehol
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
-crcdata_remove2011 <- subset(crcdata, year != "2011")
-ggplot(crcdata_remove2011, aes(x=year)) + 
+ggplot(crcdata, aes(x=year)) + 
     geom_bar(stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata$year)
 
 ```
 \newpage
 
-
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+# library(gridExtra)
+# grid.arrange(grobs = list(plot1, plot2, plot3, plot4), ncol=2)
+```
 
 
 ## Level of Stakeholder Engagement by Year - Ghodsvali
@@ -339,34 +336,31 @@ ggplot(crcdata_new, aes(fill=local, x=year)) +
 library(dplyr)
 crcdata_st <- read.csv("./data/crc_data_ES2.csv")
 
-crcdata_stremove2011 <- subset(crcdata_st, year != "2011")
-colnames(crcdata_stremove2011)[22] <- "Stakeholder Engagement"
-ggplot(crcdata_stremove2011, aes(fill=`Stakeholder Engagement`, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_st$year) + guides(col=guide_legend("Stakeholder Engagement? Yes or No"))
+ggplot(crcdata_st, aes(fill=S_stakeholder_engagment_YN, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_st$year)
 
 
 ```
 
 \newpage
 
-<!-- ## Level of Stakeholder Engagement by Year - Local -->
+## Level of Stakeholder Engagement by Year - Local
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 #year
+library(dplyr)
 
-# library(dplyr)
-# 
-# crcdata_new <- crcdata %>% 
-#   mutate(IAP2 = sprintf("%d_%d_%d_%d_%d_%d", STE_IAP2_data_gathering,STE_IAP2_inform,STE_IAP2_consult,STE_IAP2_involve,STE_IAP2_collab,STE_IAP2_empower))
-# 
-# crcdata_new <- crcdata_new[!(crcdata_new$IAP2 %in% "0_0_0_0_0_0"),]
-# 
-# library(dplyr)
-# crcdata_new <- crcdata_new %>%
-#     mutate(IAP2 = recode(IAP2, '1_0_0_0_0_0' = 'data gathering', '0_1_0_0_0_0' = 'inform', '0_0_1_0_0_0' =  'consult', '0_0_0_1_0_0' = 'involve',  '0_0_0_0_1_0' = 'collab', '0_0_0_0_0_1' =  'empower'))
-# 
-# ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
-#     geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
+crcdata_new <- crcdata %>% 
+  mutate(IAP2 = sprintf("%d_%d_%d_%d_%d_%d", STE_IAP2_data_gathering,STE_IAP2_inform,STE_IAP2_consult,STE_IAP2_involve,STE_IAP2_collab,STE_IAP2_empower))
+
+crcdata_new <- crcdata_new[!(crcdata_new$IAP2 %in% "0_0_0_0_0_0"),]
+
+library(dplyr)
+crcdata_new <- crcdata_new %>%
+    mutate(IAP2 = recode(IAP2, '1_0_0_0_0_0' = 'data gathering', '0_1_0_0_0_0' = 'inform', '0_0_1_0_0_0' =  'consult', '0_0_0_1_0_0' = 'involve',  '0_0_0_0_1_0' = 'collab', '0_0_0_0_0_1' =  'empower'))
+
+ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
 
 
 ```
@@ -402,10 +396,8 @@ barplot(df, las=2, main = "Stakeholder Types")
 
 #ghodsvali scale
 df <- t(t(colSums(crcdata[,33:36])))
-df <- df[order(df[,1]),]
-par(mar = c(11,4,4,4))
-
-barplot(c(df[3], df[4], df[2], df[1]), las=2, main="Ghodsvali Scale Breakdown")
+df <- df[order(df[,1], decreasing = TRUE),]
+barplot(df, las=2, main="Ghodsvali Scale Breakdown")
 
 ```
 \newpage
@@ -418,7 +410,7 @@ barplot(c(df[3], df[4], df[2], df[1]), las=2, main="Ghodsvali Scale Breakdown")
 df <- t(t(colSums(crcdata[,37:42])))
 df <- df[order(df[,1], decreasing = TRUE),]
 par(mar = c(12,4,4,4))
-barplot(c(df[2], df[6], df[1], df[3], df[4], df[5]), las=2, main = "IAP2 Scale Breakdown")
+barplot(df, las=2, main = "IAP2 Scale Breakdown")
 
 ```
 \newpage
@@ -431,10 +423,7 @@ barplot(c(df[2], df[6], df[1], df[3], df[4], df[5]), las=2, main = "IAP2 Scale B
 df <- t(t(colSums(crcdata[,43:51])))
 df <- df[order(df[,1], decreasing = TRUE),]
 par(mar = c(9,4,4,4))
-#barplot(df, las=2, main="Local Scale Breakdown")
-
-
-barplot(c(df[1], df[3], df[6], df[8], df[4], df[2], df[9], df[5], df[7]), las=2, main="Local Scale")
+barplot(df, las=2, main="Local Scale Breakdown")
 
 ```
 \newpage
