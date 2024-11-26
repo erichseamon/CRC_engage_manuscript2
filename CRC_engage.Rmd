@@ -44,6 +44,9 @@ names(crcdata)[names(crcdata) == 'G_na'] <- 'G_nogeography'
 
 names(crcdata)[43] <- "SC_researcher"
 
+names(crcdata)[51] <- "G_notdescribed"
+
+
 ```
 
 \newpage
@@ -166,7 +169,7 @@ barnard.test(13,5,370,95)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(crcdata,aes(x=solution_proposed_YN, fill=year)) + ggtitle("Solution Proposed: Y=18") + labs(x="Was a solution proposed?") +
-  geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal() + theme_minimal()+
+  geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal() + theme_minimal()+
   theme(text = element_text(),
         axis.text.x = element_text(angle = 0, hjust = 1)) 
 
@@ -177,7 +180,7 @@ ggplot(crcdata,aes(x=solution_proposed_YN, fill=year)) + ggtitle("Solution Propo
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-ggplot(crcdata,aes(x=solution_implemented_YN, fill=year)) + ggtitle("Solution Implemented: Y=11") + labs(x="Was a solution implemented?") + geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()+
+ggplot(crcdata,aes(x=solution_implemented_YN, fill=year)) + ggtitle("Solution Implemented: Y=11") + labs(x="Was a solution implemented?") + geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal()+
   theme(text = element_text(),
         axis.text.x = element_text(angle = 0, hjust = 1)) 
 
@@ -195,7 +198,7 @@ p3a <- as.data.frame(plot3_data)
 p3a$group <- c("Technological", "Policy", "Institutional", "Social", "Economic", "Ecological", "Educational")
 
 # 
-ggplot(p3a, aes(x=group, y=plot3_data)) + geom_bar(stat="identity",fill="gray", color="black") + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) +
+ggplot(p3a, aes(x=group, y=plot3_data)) + geom_bar(stat="identity",fill="#99CC99") + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) +
   xlab("Solution Types") + ylab("Count")
 
 
@@ -206,7 +209,7 @@ ggplot(p3a, aes(x=group, y=plot3_data)) + geom_bar(stat="identity",fill="gray", 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 ggplot(crcdata,aes(x=S_model_YN, fill=year)) + ggtitle("Computational Model Used: Y=366") + labs(x="Was a computational model used?") +
-  geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()
+  geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal()
  
 ``` 
 \newpage
@@ -225,7 +228,7 @@ ggplot(crcdata,aes(x=S_model_YN, fill=year)) + ggtitle("Computational Model Used
 #barplot(table(crcdata$S_stakeholder_engagment_YN), main = "Stakeholder Engagment: Y=92")
 
 ggplot(crcdata,aes(x=S_stakeholder_engagment_YN, fill=year)) + ggtitle("Stakeholder Engagement: YES=92") + labs(x="Were stakeholders engaged?") +
-  geom_bar(stat = "count", position = "dodge", fill="gray", color="black") + theme_minimal()
+  geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal()
 
 ```
 \newpage
@@ -236,7 +239,8 @@ ggplot(crcdata,aes(x=S_stakeholder_engagment_YN, fill=year)) + ggtitle("Stakehol
 #year
 crcdata_remove2011 <- subset(crcdata, year != "2011")
 ggplot(crcdata_remove2011, aes(x=year)) + 
-    geom_bar(stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata$year)
+    geom_bar(stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata$year) +
+  geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal()
 
 ```
 \newpage
@@ -264,8 +268,10 @@ crcdata_new$ghodsvali <- as.factor(crcdata_new$ghodsvali)
 
 crcdata_new$ghodsvali <- factor(crcdata_new$ghodsvali, levels = c("nominal", "instrumental", "representative", "transformative"))
 
+my_colors <- c("#99CC99", "#669999", "#6666CC", "#CC9966")
+
 ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors)
 
 
 ```
@@ -292,10 +298,10 @@ crcdata_new$IAP2 <- as.factor(crcdata_new$IAP2)
 
 crcdata_new$IAP2 <- factor(crcdata_new$IAP2, levels = c("data gathering", "inform", "consult", "involve", "collab", "empower"))
 
-
+my_colors <- c("#99CC99", "#669999", "#6666CC", "#9966CC", "#CC9966", "#FFCC66")
 
 ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors)
 
 
 ```
@@ -309,24 +315,26 @@ ggplot(crcdata_new, aes(fill=IAP2, x=year)) +
 library(dplyr)
 
 crcdata_new <- crcdata %>% 
-  mutate(local = sprintf("%d_%d_%d_%d_%d_%d_%d_%d_%d", SC_researcher,SC_datagathering,SC_inform,SC_perspectives,SC_plan,SC_identify,SC_envision,SC_implement,SC_notdescribed))
+  mutate(local = sprintf("%d_%d_%d_%d_%d_%d_%d_%d", SC_researcher,SC_datagathering,SC_inform,SC_perspectives,SC_plan,SC_identify,SC_envision,SC_implement))
 
 
 crcdata_new <- crcdata_new[!(crcdata_new$local %in% "0_0_0_0_0_0_0_0_0"),]
 
 library(dplyr)
 crcdata_new <- crcdata_new %>%
-    mutate(local = recode(local, '1_0_0_0_0_0_0_0_0' ='researcher', '0_1_0_0_0_0_0_0_0'='data gathering', '0_0_1_0_0_0_0_0_0' = 'inform', '0_0_0_1_0_0_0_0_0' =  'perspectives', '0_0_0_0_1_0_0_0_0' = 'plan',  '0_0_0_0_0_1_0_0_0' = 'identify', '0_0_0_0_0_0_1_0_0' =  'envision',  '0_0_0_0_0_0_0_1_0' = 'implement', '0_0_0_0_0_0_0_0_1' =  'not described', '1_0_0_0_0_0_0_1_0' ='researcher', '1_1_0_0_0_0_0_0_0' ='researcher' ))
+    mutate(local = recode(local, '1_0_0_0_0_0_0_0_0' ='researcher', '0_1_0_0_0_0_0_0_0'='data gathering', '0_0_1_0_0_0_0_0_0' = 'inform', '0_0_0_1_0_0_0_0_0' =  'perspectives', '0_0_0_0_1_0_0_0_0' = 'plan',  '0_0_0_0_0_1_0_0_0' = 'identify', '0_0_0_0_0_0_1_0_0' =  'envision',  '0_0_0_0_0_0_0_1_0' = 'implement',  '1_0_0_0_0_0_0_1_0' ='researcher', '1_1_0_0_0_0_0_0_0' ='researcher' ))
 
 crcdata_new$local <- as.factor(crcdata_new$local)
 
 
-crcdata_new$local <- factor(crcdata_new$local, levels = c("researcher", "data gathering", "inform", "perspectives", "plan", "identify", "envision", "implement", "not described"))
+crcdata_new$local <- factor(crcdata_new$local, levels = c("researcher", "data gathering", "inform", "perspectives", "plan", "identify", "envision", "implement"))
 
 
+my_colors <- c("#66FF33", "#339900", "#99CC99", "#669999", "#6666CC", "#9966CC", "#CC9966", "#FFCC66")
 
 ggplot(crcdata_new, aes(fill=local, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year)
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors)
+
 
 
 ```
@@ -339,10 +347,15 @@ ggplot(crcdata_new, aes(fill=local, x=year)) +
 library(dplyr)
 crcdata_st <- read.csv("./data/crc_data_ES2.csv")
 
+
+
+my_colors <- c("#99CC99",  "#CC9966")
+
 crcdata_stremove2011 <- subset(crcdata_st, year != "2011")
 colnames(crcdata_stremove2011)[22] <- "Stakeholder Engagement"
 ggplot(crcdata_stremove2011, aes(fill=`Stakeholder Engagement`, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_st$year) + guides(col=guide_legend("Stakeholder Engagement? Yes or No"))
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_st$year) + guides(col=guide_legend("Stakeholder Engagement? Yes or No")) + scale_fill_manual(values = my_colors)
+
 
 
 ```
@@ -459,7 +472,7 @@ barplot(df, las=2, main="Geographic Location Breakdown")
 ghodsvali.fit<-glm(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,family=binomial,data=crcdata)
 IAP2.fit<-glm(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower,family=binomial,data=crcdata)
 
-local.fit<-glm(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement+SC_notdescribed,family=binomial,data=crcdata)
+local.fit<-glm(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,family=binomial,data=crcdata)
 
 ```
 
@@ -543,7 +556,7 @@ logistic.display(model_vs_solutions)
 
 #Diversity of stakeholders vs solutions (using ratio)
 
-crcdata$ST_ratio <- rowSums(crcdata[,23:32])/10
+crcdata$ST_ratio <- rowSums(crcdata[,23:31])/9
 
 stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
 
@@ -551,6 +564,42 @@ summary(stratio_vs_solutions)
 logistic.display(stratio_vs_solutions)
 
 ```
+
+\newpage
+
+## Diversity of stakeholders vs solution - full predictors
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+crcdata$ST_ratio <- rowSums(crcdata[,23:31])/10
+
+stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_farmers + ST_combined_gov + ST_tribal + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university + ST_experts,family=binomial,data=crcdata)
+
+summary(stratio_vs_solutions)
+#logistic.display(stratio_vs_solutions)
+
+```
+
+\newpage
+## Diversity of Researchers vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of researchers vs solutions (using ratio)
+
+
+crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
+
+rratio_vs_solutions <-glm(solution_proposed_YN ~ R_ratio,family=binomial,data=crcdata)
+
+summary(rratio_vs_solutions)
+logistic.display(rratio_vs_solutions)
+
+```
+
 \newpage
 
 ## Interdisciplinary Researchers vs Solution
@@ -565,22 +614,6 @@ In order to accurately reflect diversity of researchers, we run a binomial logis
 crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
 
 rratio_vs_solutions <-glm(solution_proposed_YN ~ R_interdis,family=binomial,data=crcdata)
-
-summary(rratio_vs_solutions)
-logistic.display(rratio_vs_solutions)
-
-```
-\newpage
-## Diversity of Researchers vs solution
-
-```{r echo=FALSE, warning=FALSE, message=FALSE}
-
-#Diversity of researchers vs solutions (using ratio)
-
-
-crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
-
-rratio_vs_solutions <-glm(solution_proposed_YN ~ R_ratio,family=binomial,data=crcdata)
 
 summary(rratio_vs_solutions)
 logistic.display(rratio_vs_solutions)
@@ -634,7 +667,7 @@ summary(ST_engagement_IAP2)
 
 #stakeholder type vs level of engagement local
 
-ST_engagement_IAP2<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement+SC_notdescribed,data=crcdata)
+ST_engagement_IAP2<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,data=crcdata)
 
 summary(ST_engagement_IAP2)
 
@@ -663,7 +696,7 @@ summary(ST_solution)
 
 #geographic area vs solution
 
-geog_solution <- glm(solution_proposed_YN~G_local+G_regional+G_national+G_multination+G_global, family=binomial, data=crcdata)
+geog_solution <- glm(solution_proposed_YN~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, family=binomial, data=crcdata)
 summary(geog_solution)
 logistic.display(geog_solution)
 
@@ -678,7 +711,7 @@ logistic.display(geog_solution)
 
 #geographic area vs solution
 
-geog_stakeholdertype <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~G_local+G_regional+G_national+G_multination+G_global, data=crcdata)
+geog_stakeholdertype <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=crcdata)
 
 summary(geog_stakeholdertype)
 
@@ -692,7 +725,7 @@ summary(geog_stakeholdertype)
 
 #geographic area vs solution
 
-geog_engagment_ghodsvali <- lm(cbind(G_local,G_regional,G_national,G_multination,G_global)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
+geog_engagment_ghodsvali <- lm(cbind(G_notdescribed,G_local,G_regional,G_national,G_multination,G_global)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
 
 summary(geog_engagment_ghodsvali)
 
@@ -703,7 +736,7 @@ summary(geog_engagment_ghodsvali)
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 
-geog_engagment_IAP2 <- lm(cbind(G_local,G_regional,G_national,G_multination,G_global)~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=crcdata)
+geog_engagment_IAP2 <- lm(cbind(G_notdescribed,G_local,G_regional,G_national,G_multination,G_global)~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=crcdata)
 
 summary(geog_engagment_IAP2)
 
@@ -714,7 +747,21 @@ summary(geog_engagment_IAP2)
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 
-geog_engagment_local <- lm(cbind(G_local,G_regional,G_national,G_multination,G_global)~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement+SC_notdescribed, data=crcdata)
+geog_engagment_local <- lm(cbind(G_notdescribed,G_local,G_regional,G_national,G_multination,G_global)~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=crcdata)
+
+summary(geog_engagment_local)
+
+```
+
+
+\newpage
+
+## Geographic area vs engagment (local)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+
+geog_engagment_local <- lm(cbind(G_notdescribed,G_local,G_regional,G_national,G_multination,G_global)~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=crcdata)
 
 summary(geog_engagment_local)
 
