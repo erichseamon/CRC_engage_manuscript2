@@ -61,25 +61,6 @@ names(crcdata)[51] <- "G_notdescribed"
 ```
 
 
-
-<<<<<<< HEAD
-=======
-<!-- \newpage -->
-
-<!-- # Variable Summary -->
-
-<!-- Below is a list of the categorical variables generated from the literature reviews -->
-
-<!-- ```{r echo=FALSE, warning=FALSE, message=FALSE} -->
-<!-- library(knitr) -->
-<!-- library(kableExtra) -->
-<!-- df <- data.frame(Variables = c("Year", "Solution Proposed", "Solution Implemented", "Solution Type", "Computational Model Used", "Researcher Type", "Stakeholder Type", "Stakeholder Engagment Scale - Ghodsvali", "Stakeholder Engagment Scale - IAP2", "Stakeholder Engagement Scale - Local", "Geographical Type"), Description = linebreak(c("Year of citation", "Was a solution proposed?", "Was a solution implemented?","If a solution was proposed, what was the solution type? Groups include: Technology, Policy, Institutional, Social, Economic, Ecological, and Educational.", "Was a computational model used?", "What was the research type?  Groups include: NGO, English, Math, Computer Science, Physics, Engineering, Interdisciplinary, Social Science, Economics, Agriculture, and Other","What was the stakeholder type? Groups include: Farmers, Combined Government, Combined Coalition, Combined Industry, Migrants, Youth, Public, Univerity, and Experts", "If a stakeholder was engaged, categorization of the engagement using the Ghodsvali scale. Groups include: Nominal, Instrumental, Representation, and Transformative", "If a stakeholder was engaged, categorization of the engagement using the IAP2 scale. Groups include: Data Gathering, Inform, Consult, Involve, Collaborate, and Empower", "If a stakeholder was engaged, categorization of the engagement using a customized scale. Groups include: Researcher, Data Gathering, Inform, Perspectives, Planning, Identify, Envision, and Implement", "What the geography type? Groups include: Not Described, Local, Regional, National, Multinational, Global, and No Geography"))) -->
-<!-- kable(df, col.names = c("Variable Name", "Description"), escape = F, caption = "Table T1: Variable Descriptions") %>% column_spec(2, width = "2in") %>% column_spec(c(1:2), width = "2.5in") %>% kable_styling(full_width = FALSE,latex_options = c("hold_position", "scale_down"), font_size = 8) %>% collapse_rows(columns = 2) %>% kable_classic_2(full_width = F) %>% row_spec(0,bold=TRUE)  -->
-
-<!-- ``` -->
-
-
->>>>>>> eed7f414c67a86732378ea847eabdbccb1ff1097
 \newpage
 
 # Variable Summary
@@ -89,25 +70,25 @@ Below is a list of the categorical variables generated from the literature revie
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(knitr)
 library(kableExtra)
-df <- data.frame(Variables = c("Year", "Solution Proposed", "Solution Implemented",  "Stakeholder Type", "Stakeholder Engagment Scale - Ghodsvali", "Stakeholder Engagment Scale - IAP2", "Stakeholder Engagement Scale - Local"), Description = linebreak(c("Year of citation", "Was a solution proposed?", "Was a solution implemented?","What was the stakeholder type? Groups include: Farmers, Combined Government, Combined Coalition, Combined Industry, Migrants, Youth, Public, Univerity, and Experts", "If a stakeholder was engaged, categorization of the engagement using the Ghodsvali scale. Groups include: Nominal, Instrumental, Representation, and Transformative", "If a stakeholder was engaged, categorization of the engagement using the IAP2 scale. Groups include: Data Gathering, Inform, Consult, Involve, Collaborate, and Empower", "If a stakeholder was engaged, categorization of the engagement using a customized scale. Groups include: Researcher, Data Gathering, Inform, Perspectives, Planning, Identify, Envision, and Implement")))
-kable(df, col.names = c("Variable Name", "Description"), escape = F, caption = "Table T1: Variable Descriptions") %>% column_spec(2, width = "2in") %>% column_spec(c(1:2), width = "2.5in") %>% kable_styling(full_width = FALSE,latex_options = c("hold_position", "scale_down"), font_size = 8) %>% collapse_rows(columns = 2) %>% kable_classic_2(full_width = F) %>% row_spec(0,bold=TRUE) 
+df <- data.frame(Variables = c("Year", "Solution Proposed", "Solution Implemented", "Solution Type", "Computational Model Used", "Researcher Type", "Stakeholder Type", "Stakeholder Engagment Scale - Ghodsvali", "Stakeholder Engagment Scale - IAP2", "Stakeholder Engagement Scale - Local", "Geographical Type"), Description = linebreak(c("Year of citation", "Was a solution proposed?", "Was a solution implemented?","If a solution was proposed, what was the solution type? Groups include: Technology, Policy, Institutional, Social, Economic, Ecological, and Educational.", "Was a computational model used?", "What was the research type?  Groups include: NGO, English, Math, Computer Science, Physics, Engineering, Interdisciplinary, Social Science, Economics, Agriculture, and Other","What was the stakeholder type? Groups include: Farmers, Combined Government, Combined Coalition, Combined Industry, Migrants, Youth, Public, Univerity, and Experts", "If a stakeholder was engaged, categorization of the engagement using the Ghodsvali scale. Groups include: Nominal, Instrumental, Representation, and Transformative", "If a stakeholder was engaged, categorization of the engagement using the IAP2 scale. Groups include: Data Gathering, Inform, Consult, Involve, Collaborate, and Empower", "If a stakeholder was engaged, categorization of the engagement using a customized scale. Groups include: Researcher, Data Gathering, Inform, Perspectives, Planning, Identify, Envision, and Implement", "What the geography type? Groups include: Not Described, Local, Regional, National, Multinational, Global, and No Geography")))
+kable(df, col.names = c("Variable Name", "Description"), escape = F, caption = "Table T1: Variable Descriptions") %>% column_spec(2, width = "2in") %>% column_spec(c(1:2), width = "2.5in") %>% kable_styling(full_width = FALSE,latex_options = c("hold_position", "scale_down"), font_size = 8) %>% collapse_rows(columns = 2) %>% kable_classic_2(full_width = F) %>% row_spec(0,bold=TRUE)
 
 ```
 
 
-\newpage
+<!-- \newpage -->
 
-# Variable Summary REFINED
+<!-- # Variable Summary REFINED -->
 
-Below is a list of the categorical variables generated from the literature reviews REFINED
+<!-- Below is a list of the categorical variables generated from the literature reviews REFINED -->
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
-library(knitr)
-library(kableExtra)
-df <- data.frame(Variables = c("Year", "Solution Proposed", "Solution Implemented",  "Stakeholder Type", "Stakeholder Engagment Scale - Ghodsvali", "Stakeholder Engagment Scale - IAP2", "Stakeholder Engagement Scale - Local"), Description = linebreak(c("Year of citation", "Was a solution proposed?", "Was a solution implemented?","What was the stakeholder type? Groups include: Farmers, Combined Government, Combined Coalition, Combined Industry, Migrants, Youth, Public, Univerity, and Experts", "If a stakeholder was engaged, categorization of the engagement using the Ghodsvali scale. Groups include: Nominal, Instrumental, Representation, and Transformative", "If a stakeholder was engaged, categorization of the engagement using the IAP2 scale. Groups include: Data Gathering, Inform, Consult, Involve, Collaborate, and Empower", "If a stakeholder was engaged, categorization of the engagement using a customized scale. Groups include: Researcher, Data Gathering, Inform, Perspectives, Planning, Identify, Envision, and Implement")))
-kable(df, col.names = c("Variable Name", "Description"), escape = F, caption = "Table T1: Variable Descriptions") %>% column_spec(2, width = "2in") %>% column_spec(c(1:2), width = "2.5in") %>% kable_styling(full_width = FALSE,latex_options = c("hold_position", "scale_down"), font_size = 8) %>% collapse_rows(columns = 2) %>% kable_classic_2(full_width = F) %>% row_spec(0,bold=TRUE) 
+<!-- ```{r echo=FALSE, warning=FALSE, message=FALSE} -->
+<!-- library(knitr) -->
+<!-- library(kableExtra) -->
+<!-- df <- data.frame(Variables = c("Year", "Solution Proposed", "Solution Implemented",  "Stakeholder Type", "Stakeholder Engagment Scale - Ghodsvali", "Stakeholder Engagment Scale - IAP2", "Stakeholder Engagement Scale - Local"), Description = linebreak(c("Year of citation", "Was a solution proposed?", "Was a solution implemented?","What was the stakeholder type? Groups include: Farmers, Combined Government, Combined Coalition, Combined Industry, Migrants, Youth, Public, Univerity, and Experts", "If a stakeholder was engaged, categorization of the engagement using the Ghodsvali scale. Groups include: Nominal, Instrumental, Representation, and Transformative", "If a stakeholder was engaged, categorization of the engagement using the IAP2 scale. Groups include: Data Gathering, Inform, Consult, Involve, Collaborate, and Empower", "If a stakeholder was engaged, categorization of the engagement using a customized scale. Groups include: Researcher, Data Gathering, Inform, Perspectives, Planning, Identify, Envision, and Implement"))) -->
+<!-- kable(df, col.names = c("Variable Name", "Description"), escape = F, caption = "Table T1: Variable Descriptions") %>% column_spec(2, width = "2in") %>% column_spec(c(1:2), width = "2.5in") %>% kable_styling(full_width = FALSE,latex_options = c("hold_position", "scale_down"), font_size = 8) %>% collapse_rows(columns = 2) %>% kable_classic_2(full_width = F) %>% row_spec(0,bold=TRUE)  -->
 
-```
+<!-- ``` -->
 
 
 \newpage
@@ -306,6 +287,13 @@ ggplot(crcdata_remove2011, aes(x=year)) +
     geom_bar(stat="count")+theme_bw() + scale_x_continuous(breaks = crcdata$year) +
   geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
+
+```
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, results=FALSE}
+#year
+
 png("./images/fews_year.png", res=300, width = 1500, height = 1500 )
 ggplot(crcdata_remove2011, aes(x=year)) + 
     geom_bar(stat="count")+theme_bw() + scale_x_continuous(breaks = crcdata$year) +
@@ -314,6 +302,8 @@ dev.off()
 
 
 ```
+
+
 \newpage
 
 
@@ -344,12 +334,18 @@ my_colors <- c("#99CC99", "#669999", "#6666CC", "#CC9966")
 ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) + 
     geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors) + scale_fill_discrete(name = "Ghodsvali Scale")
 
+```
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, results=FALSE}
+
 png("./images/fews_ghodsvali.png", res=300, width = 1500, height = 1500 )
 ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) + 
     geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors) + scale_fill_discrete(name = "Ghodsvali Scale")
 dev.off()
 
 ```
+
 \newpage
 
 ## Level of stakeholder engagement by year - IAP2 scale
@@ -377,6 +373,11 @@ my_colors <- c("#99CC99", "#669999", "#6666CC", "#9966CC", "#CC9966", "#FFCC66")
 
 ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
     geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors) + scale_fill_discrete(name = "IAP2 Scale")
+
+
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, results=FALSE}
 
 png("./images/fews_iap2.png", res=300, width = 1500, height = 1500 )
 ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
