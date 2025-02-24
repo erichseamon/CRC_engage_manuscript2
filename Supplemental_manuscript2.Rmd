@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Supplemental Materials Summary
 
-
+Narrative to be added later.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -698,7 +698,7 @@ local.fit<-glm(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC
 ```
 
 \newpage
-# Regression Testing
+# Ghodsvali Scale Modeling - solution proposed
 
 ## Ghodsvali scale regression
 
@@ -757,6 +757,8 @@ importance(rf)
 
 \newpage
 
+# IAP2 Scale Modeling - solution proposed
+
 ## IAP2 scale regression 
 
 IAP2 scale regression testing on whether a solution was proposed or not
@@ -813,6 +815,8 @@ importance(rf)
 
 \newpage
 
+# Local Scale Modeling - solution proposed 
+
 ## Local scale regression
 
 Local scale regression predicting whether a solution was proposed or not
@@ -867,7 +871,9 @@ importance(rf)
 
 \newpage
 
-## Engagement vs. solution - regression testing
+# Stakeholder Engagement Modeling - solution proposed
+
+## Regression Testing - Engagement vs. solution
 
 Regression of whether stakeholder engagement (Y/N) predicts if a solution was proposed (Y/N)
 
@@ -886,7 +892,7 @@ summary(stakeholder_vs_solutions)
 
 \newpage
 
-## Engagement vs. solution - odds
+## Odds Ratio - Engagement vs. solution
 
 Odds of whether stakeholder engagement (Y/N) predicts if a solution was proposed (Y/N)
 
@@ -904,7 +910,9 @@ logistic.display(stakeholder_vs_solutions)
 
 \newpage
 
-## Use of computational model vs. solution - regression testing
+# Compuational Model used Modeling - solution proposed
+
+## Regression Testing - Use of computational model vs. solution
 
 Regression of whether a computational model was used predicts if a solution was proposed (Y/N)
 
@@ -922,7 +930,7 @@ summary(model_vs_solutions)
 
 \newpage
 
-## Use of computational model vs. solution - odds
+## Odds Ratios - Use of computational model vs. solution
 
 Odds of whether a computational model was used predicts if a solution was proposed (Y/N)
 
@@ -955,13 +963,15 @@ IAP2_vs_model <-glm(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP
 
 \newpage
 
+# Ghodsvali Modeling - Computational Model
+
 ## Regression Testing - Ghodsvali vs whether a computational model was used
 
 Regression testing for Ghodsvali scale used to predict if a computational model was used (Y/N)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-#summary(ghodsvali_vs_model)
+summary(ghodsvali_vs_model)
 
 ```
 
@@ -973,7 +983,7 @@ Odds ratio for Ghodsvali scale used to predict if a computational model was used
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-#logistic.display(ghodsvali_vs_model)
+logistic.display(ghodsvali_vs_model)
 
 ```
 
@@ -1012,13 +1022,15 @@ importance(rf)
 
 \newpage
 
+# IAP2 Modeling - Computational Model
+
 ## Regression Testing - IAP2 vs whether a computational model was used
 
 Regression testing for IAP2 scale used to predict if a computational model was used (Y/N)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-#summary(IAP2_vs_model)
+summary(IAP2_vs_model)
 
 ```
 
@@ -1030,7 +1042,7 @@ Odds ratio for IAP2 scale used to predict if a computational model was used (Y/N
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-#logistic.display(IAP2_vs_model)
+logistic.display(IAP2_vs_model)
 
 ```
 \newpage
@@ -1068,13 +1080,15 @@ importance(rf)
 
 \newpage
 
+# Local Modeling - Computational Model
+
 ## Regression Testing - Local scale vs whether a computational model was used
 
 Regression testing for Local scale used to predict if a computational model was used (Y/N)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-#summary(local_vs_model)
+summary(local_vs_model)
 
 ```
 
@@ -1086,13 +1100,13 @@ Odds ratio for Local scale used to predict if a computational model was used (Y/
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-#logistic.display(local_vs_model)
+logistic.display(local_vs_model)
 
 ```
 
 \newpage
 
-## Local scale Ensembled Decision Tree vs whether a computational model was used
+## Localscale Ensembled Decision Tree vs whether a computational model was used
 
 Ensembled decision tree for Local scale used to predict if a computational model was used (Y/N)
 
@@ -1124,11 +1138,11 @@ importance(rf)
 ```
 
 
-\newpage
+<!-- \newpage -->
 
-## Diversity of stakeholders vs solution
+<!-- ## Diversity of stakeholders vs solution -->
 
-Regression of whether Diversity of stakeholders predicts if a solution was proposed (Y/N).  In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
+<!-- Regression of whether Diversity of stakeholders predicts if a solution was proposed (Y/N).  In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity. -->
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1138,7 +1152,7 @@ crcdata$ST_ratio <- rowSums(crcdata[,23:31])/9
 
 stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
 
-summary(stratio_vs_solutions)
+#summary(stratio_vs_solutions)
 #logistic.display(stratio_vs_solutions)
 
 ```
@@ -1180,33 +1194,33 @@ summary(stratio_vs_solutions)
 #logistic.display(stratio_vs_solutions)
 
 ```
-\newpage
 
-## Ensembed Decision Tree - Diversity of stakeholders vs solution
+
+<!-- ## Ensembed Decision Tree - Diversity of stakeholders vs solution -->
 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #RF scales
 
-library(randomForest)
-library(caret)
-set.seed(2223)
-ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
-train <- crcdata[ind==1,]
-test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_public + ST_university + ST_experts, data=train, proximity=TRUE, importance=TRUE) 
-print(rf)
-
-p2 <- predict(rf, test)
-confusionMatrix(p2, test$solution_proposed_YN)
-
-hist(treesize(rf),
-     main = "No. of Nodes for the Trees",
-     col = "green")
-varImpPlot(rf,
-           main = "Top 10 - Variable Importance")
-importance(rf)
+# library(randomForest)
+# library(caret)
+# set.seed(2223)
+# ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+# train <- crcdata[ind==1,]
+# test <- crcdata[ind==2,]
+# rf <- randomForest(solution_proposed_YN ~ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_public + ST_university + ST_experts, data=train, proximity=TRUE, importance=TRUE) 
+# print(rf)
+# 
+# p2 <- predict(rf, test)
+# confusionMatrix(p2, test$solution_proposed_YN)
+# 
+# hist(treesize(rf),
+#      main = "No. of Nodes for the Trees",
+#      col = "green")
+# varImpPlot(rf,
+#            main = "Top 10 - Variable Importance")
+# importance(rf)
 
 
 ```
@@ -1214,6 +1228,9 @@ importance(rf)
 
 
 \newpage
+
+# Researcher Diversity Modeling - solution proposed
+
 ## Regression Testing - Diversity of researchers vs solution
 
 Regression of whether Diversity of researchers predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of researcher types involved, divided by the total number of possible researcher options.  A ratio which is closer to 1 has a greater level of researcher diversity.
@@ -1274,6 +1291,8 @@ logistic.display(rratio_vs_solutions)
 
 \newpage
 
+# Stakeholder Engagement Modeling - Ghodsvali
+
 ## Regression Testing - Stakeholder type vs level of engagement (Ghodsvali)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
@@ -1300,6 +1319,8 @@ summary(ST_engagement)
 
 \newpage
 
+# Stakeholder Engagement Modeling - IAP2
+
 ## Regression Testing - Stakeholder type vs level of engagement (IAP2)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
@@ -1313,6 +1334,8 @@ summary(ST_engagement_IAP2)
 ```
 
 \newpage
+
+# Stakeholder Engagement Modeling - Local
 
 ## Regression Testing - Stakeholder type vs level of engagement (local) 
 
@@ -1342,6 +1365,8 @@ summary(ST_solution)
 ```
 
 \newpage
+
+# Geographic Location Modeling - solution proposed
 
 ## Regression Testing - Geographic area vs solution
 
@@ -1399,9 +1424,9 @@ importance(rf)
 
 ```
 
-
-
 \newpage
+
+# Multivariate Stakeholder Engagement Modeling - geographic area
 
 ## Regression Testing - stakeholder type vs geographic area - interactions and effects
 
@@ -1417,6 +1442,8 @@ summary(geog_stakeholdertype)
 
 \newpage
 
+# Multivariate Geographic Modeling - Ghodsvali
+
 ## Regression Testing - Geographic area vs engagment (Ghodsvali) - interactions and effects
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
@@ -1430,6 +1457,8 @@ summary(geog_engagment_ghodsvali)
 ```
 \newpage
 
+# Multivariate Geographic Modeling - IAP2
+
 ## Regression Testing - Geographic area vs engagment (IAP2) - interactions and effects
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1440,6 +1469,8 @@ summary(geog_engagment_IAP2)
 
 ```
 \newpage
+
+# Multivariate Geographic Modeling - Local
 
 ## Regression Testing - Geographic area vs engagment (local) - interactions and effects
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
