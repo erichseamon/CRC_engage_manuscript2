@@ -738,7 +738,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=train, proximity=TRUE) 
+rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
@@ -796,7 +796,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=train, proximity=TRUE) 
+rf <- randomForest(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
@@ -853,7 +853,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=train, proximity=TRUE) 
+rf <- randomForest(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
@@ -1004,7 +1004,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(S_model_YN ~ STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=train, proximity=TRUE) 
+rf <- randomForest(S_model_YN ~ STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
@@ -1062,7 +1062,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=train, proximity=TRUE) 
+rf <- randomForest(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
@@ -1121,7 +1121,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(S_model_YN ~ SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=train, proximity=TRUE) 
+rf <- randomForest(S_model_YN ~ SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
@@ -1209,7 +1209,7 @@ stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=
 # ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 # train <- crcdata[ind==1,]
 # test <- crcdata[ind==2,]
-# rf <- randomForest(solution_proposed_YN ~ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_public + ST_university + ST_experts, data=train, proximity=TRUE, importance=TRUE) 
+# rf <- randomForest(solution_proposed_YN ~ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_public + ST_university + ST_experts, data=train, proximity=TRUE, importance=TRUE, importance=TRUE) 
 # print(rf)
 # 
 # p2 <- predict(rf, test)
@@ -1408,7 +1408,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=train, proximity=TRUE) 
+rf <- randomForest(solution_proposed_YN ~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
