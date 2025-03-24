@@ -744,6 +744,25 @@ print(rf)
 p2 <- predict(rf, test)
 confusionMatrix(p2, test$solution_proposed_YN)
 
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+
+rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
 hist(treesize(rf),
      main = "No. of Nodes for the Trees",
      col = "green")
