@@ -34,6 +34,7 @@ Narrative to be added later.
 
 library(ggplot2)
 library(epiDisplay)
+library(caret)
 
 crcdata <- read.csv("./data/crc_data_ES2.csv")
 
@@ -744,6 +745,14 @@ print(rf)
 p2 <- predict(rf, test)
 confusionMatrix(p2, test$solution_proposed_YN)
 
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+
 #----new model on data where there is no solution proposed
 
 crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
@@ -756,21 +765,18 @@ solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
 
 rf2 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
 
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
 
-rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
-
-p2_nosolution <- predict(rf2, crcdata_nosolution)
+#p2_nosolution <- predict(rf2, crcdata_nosolution)
 #confusionMatrix(p2_nosolution, test$solution_proposed_YN)
 
 
-hist(treesize(rf),
-     main = "No. of Nodes for the Trees",
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
      col = "green")
-varImpPlot(rf,
-           main = "Top 10 - Variable Importance")
-importance(rf)
-
-
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
 ```
 
 
@@ -829,6 +835,32 @@ varImpPlot(rf,
 importance(rf)
 
 
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
+
+
 ```
 
 
@@ -884,6 +916,31 @@ hist(treesize(rf),
 varImpPlot(rf,
            main = "Top 10 - Variable Importance")
 importance(rf)
+
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
 
 
 ```
@@ -1036,6 +1093,30 @@ varImpPlot(rf,
            main = "Top 10 - Variable Importance")
 importance(rf)
 
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(S_model_YN ~ STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
 
 ```
 
@@ -1094,6 +1175,30 @@ varImpPlot(rf,
            main = "Top 10 - Variable Importance")
 importance(rf)
 
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
 
 ```
 
@@ -1153,6 +1258,30 @@ varImpPlot(rf,
            main = "Top 10 - Variable Importance")
 importance(rf)
 
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
 
 ```
 
@@ -1440,7 +1569,30 @@ varImpPlot(rf,
            main = "Top 10 - Variable Importance")
 importance(rf)
 
+#----new model on data where there is no solution proposed
 
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(solution_proposed_YN ~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Model - Top 10 - Variable Importance")
+importance(rf2)
 ```
 
 \newpage
