@@ -28,7 +28,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Supplemental Materials Summary
 
-Narrative to be added later.
+This analysis focuses on examining if how stakeholder engagement, and the level of engagement, impacts whether a solution for research outcomes is proposed and/or implemented.  This meta-synthesis of 483 papers were evaluated and coded using several differing engagement scales. Additionally, each paper was coded by the geographic scale, and whether a computational model was used as part of the research. 
+
+
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -949,9 +951,10 @@ importance(rf2)
 
 # Stakeholder Engagement Modeling - solution proposed
 
-## Regression Testing - Engagement vs. solution
+## QUESTION: Does engaging stakeholders increase the likelihood that a solution will be proposed/implemented?
 
-Regression of whether stakeholder engagement (Y/N) predicts if a solution was proposed (Y/N)
+Here we use classical logistic regression using a binomial function to determine if engaging stakeholders (Y/N) increases the odds that a solution will be proposed.
+
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -965,12 +968,11 @@ summary(stakeholder_vs_solutions)
 ```
 
 
-
 \newpage
 
-## Odds Ratio - Engagement vs. solution
+## ODDS RATIOS: Does engaging stakeholders increase the likelihood that a solution will be proposed/implemented?
 
-Odds of whether stakeholder engagement (Y/N) predicts if a solution was proposed (Y/N)
+Odds of whether engaging stakeholders increases the likelihood that a solution will be proposed?
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -988,9 +990,9 @@ logistic.display(stakeholder_vs_solutions)
 
 # Compuational Model used Modeling - solution proposed
 
-## Regression Testing - Use of computational model vs. solution
+## QUESTION: Does the use of a computational model increase the likelihood that a solution will be proposed?
 
-Regression of whether a computational model was used predicts if a solution was proposed (Y/N)
+Here we use classical logistic regression using a binomial function to determine if the use of a computational model (Y/N) increases the odds that a solution will be proposed.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1006,9 +1008,9 @@ summary(model_vs_solutions)
 
 \newpage
 
-## Odds Ratios - Use of computational model vs. solution
+## ODDS RATIOS: Does the use of a computational model increase the likelihood that a solution will be proposed?
 
-Odds of whether a computational model was used predicts if a solution was proposed (Y/N)
+Odds of whether the use of a computational model increases the likelihood that a solution will be proposed.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1022,7 +1024,45 @@ logistic.display(solutions_vs_model)
 ```
 
 
+\newpage
 
+# Computational model AND Stakeholder Engagement - solution proposed
+
+## QUESTION: Does the use of a computational model PLUS stakeholder engagement increase the likelihood that a solution is proposed/implemented?
+
+Regression testing for Ghodsvali scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Use of a computational model AND stakeholder engagement - solution proposed
+
+model_engagement_solution <-glm(solution_proposed_YN ~ S_model_YN * S_stakeholder_engagment_YN,family=binomial,data=crcdata)
+
+summary(model_engagement_solution)
+
+```
+
+\newpage
+
+## ODDS RATIOS: Does the use of a computational model PLUS stakeholder engagement increase the likelihood that a solution is proposed/implemented?
+
+Odds ratios of whether the use of a computational model PLUS stakeholder engagement increase the likelihood that a solution is proposed/implemented?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Use of a computational model AND stakeholder engagement - solution proposed
+
+logistic.display(model_engagement_solution)
+
+```
+
+\newpage
+
+# Ghodsvali Modeling - Computational Model
+
+## QUESTION: As the level of Ghodsvali stakeholder engagement increases, does the likelihood of using a computational model increase?
+
+Regression testing for Ghodsvali scale used to predict if a computational model was used (Y/N)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1037,14 +1077,6 @@ IAP2_vs_model <-glm(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP
 
 ```
 
-\newpage
-
-# Ghodsvali Modeling - Computational Model
-
-## Regression Testing - Ghodsvali vs whether a computational model was used
-
-Regression testing for Ghodsvali scale used to predict if a computational model was used (Y/N)
-
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 summary(ghodsvali_vs_model)
@@ -1053,7 +1085,7 @@ summary(ghodsvali_vs_model)
 
 \newpage
 
-## Odds Ratio - Ghodsvali vs whether a computational model was used
+## ODDS RATIOS: As the level of Ghodsvali stakeholder engagement increases, does the odds of using a computational model increase?
 
 Odds ratio for Ghodsvali scale used to predict if a computational model was used (Y/N)
 
@@ -1066,7 +1098,7 @@ logistic.display(ghodsvali_vs_model)
 
 \newpage
 
-## Ghodsvali Ensembled Decision Tree vs whether a computational model was used
+## DECISION TREE: Ghodsvali Ensembled Decision Tree vs whether a computational model was used
 
 Ensembled decision tree for Ghodsvali scale used to predict if a computational model was used (Y/N)
 
@@ -1124,7 +1156,7 @@ importance(rf2)
 
 # IAP2 Modeling - Computational Model
 
-## Regression Testing - IAP2 vs whether a computational model was used
+## QUESTION: As the level of IAP2 stakeholder engagement increases, does the likelihood of using a computational model increase?
 
 Regression testing for IAP2 scale used to predict if a computational model was used (Y/N)
 
@@ -1136,7 +1168,7 @@ summary(IAP2_vs_model)
 
 \newpage
 
-## Odds Ratio - IAP2 vs whether a computational model was used
+## ODDS RATIOS: As the level of Ghodsvali stakeholder engagement increases, does the odds of using a computational model increase?
 
 Odds ratio for IAP2 scale used to predict if a computational model was used (Y/N)
 
@@ -1147,7 +1179,7 @@ logistic.display(IAP2_vs_model)
 ```
 \newpage
 
-## IAP2 Ensembled Decision Tree vs whether a computational model was used
+## DECISION TREE: IAP2 Ensembled Decision Tree vs whether a computational model was used
 
 Ensembled decision tree for IAP2 scale used to predict if a computational model was used (Y/N)
 
@@ -1206,7 +1238,7 @@ importance(rf2)
 
 # Local Modeling - Computational Model
 
-## Regression Testing - Local scale vs whether a computational model was used
+## QUESTION: As the level of Local scale stakeholder engagement increases, does the likelihood of using a computational model increase?
 
 Regression testing for Local scale used to predict if a computational model was used (Y/N)
 
@@ -1218,7 +1250,7 @@ summary(local_vs_model)
 
 \newpage
 
-## Odds Ratio - Local scale vs whether a computational model was used
+## ODDS RATIOS: As the level of Ghodsvali stakeholder engagement increases, does the odds of using a computational model increase?
 
 Odds ratio for Local scale used to predict if a computational model was used (Y/N)
 
@@ -1230,7 +1262,7 @@ logistic.display(local_vs_model)
 
 \newpage
 
-## Localscale Ensembled Decision Tree vs whether a computational model was used
+## DECISION TREE: Local scale Ensembled Decision Tree vs whether a computational model was used
 
 Ensembled decision tree for Local scale used to predict if a computational model was used (Y/N)
 
@@ -1286,11 +1318,13 @@ importance(rf2)
 ```
 
 
-<!-- \newpage -->
+\newpage
 
-<!-- ## Diversity of stakeholders vs solution -->
+## Diversity of stakeholders vs solution
 
-<!-- Regression of whether Diversity of stakeholders predicts if a solution was proposed (Y/N).  In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity. -->
+## QUESTION: Does the diversity of stakeholders increase the likelihood that a solution will be proposed?
+
+Regression testing of whether Diversity of stakeholders predicts if a solution was proposed (Y/N).  In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1300,11 +1334,22 @@ crcdata$ST_ratio <- rowSums(crcdata[,23:31])/9
 
 stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
 
-#summary(stratio_vs_solutions)
-#logistic.display(stratio_vs_solutions)
+summary(stratio_vs_solutions)
+logistic.display(stratio_vs_solutions)
 
 ```
 
+\newpage
+
+## ODDS RATIOS: Does the diversity of stakeholders increase the likelihood that a solution will be proposed?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+logistic.display(stratio_vs_solutions)
+
+```
 
 <!-- ## Regression Testing - Diversity of stakeholders vs solution -->
 
@@ -1379,7 +1424,7 @@ stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=
 
 # Researcher Diversity Modeling - solution proposed
 
-## Regression Testing - Diversity of researchers vs solution
+## QUESTION: Does the diversity of researchers increases the likelihood that a solution will be proposed?
 
 Regression of whether Diversity of researchers predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of researcher types involved, divided by the total number of possible researcher options.  A ratio which is closer to 1 has a greater level of researcher diversity.
 
@@ -1400,7 +1445,7 @@ summary(rratio_vs_solutions)
 
 \newpage
 
-## Odds Ratio - Diversity of researchers vs solution
+## ODDS RATIOS: Does the diversity of researchers increases the likelihood that a solution will be proposed?
 
 Odds of whether Diversity of researchers predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of researcher types involved, divided by the total number of possible researcher options.  A ratio which is closer to 1 has a greater level of researcher diversity.
 
@@ -1516,7 +1561,7 @@ summary(ST_solution)
 
 # Geographic Location Modeling - solution proposed
 
-## Regression Testing - Geographic area vs solution
+## QUESTION: Does the geographic location of the study increase the likelihood of proposed/implemented solutions?
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1524,14 +1569,14 @@ summary(ST_solution)
 
 geog_solution <- glm(solution_proposed_YN~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, family=binomial, data=crcdata)
 summary(geog_solution)
-logistic.display(geog_solution)
+#logistic.display(geog_solution)
 
 
 ```
 
 \newpage
 
-## Odds Ratio - Geographic area vs solution
+## ODDS RATIOS: Does the geographic location of the study increase the likelihood of proposed/implemented solutions?
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1544,7 +1589,7 @@ logistic.display(geog_solution)
 
 \newpage
 
-## Ensembed Decision Tree - Geographic area vs solution
+## DECISON TREE: Geographic area Ensembed Decision Tree - Geographic area vs solution
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
