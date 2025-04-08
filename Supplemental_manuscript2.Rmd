@@ -737,6 +737,8 @@ Ghodsvali ensembled decision tree with solution proposed being the dependent var
 
 library(randomForest)
 library(caret)
+library(pROC)
+library(ROCR)
 set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
@@ -745,6 +747,10 @@ rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_
 print(rf)
 
 p2 <- predict(rf, test)
+# p2 <- predict(rf, test, type="prob")
+# p2a <- predict(rf, test)
+# p2_df <- as.data.frame(p2)
+# p2a_df <- as.data.frame(p2a)
 confusionMatrix(p2, test$solution_proposed_YN)
 
 hist(treesize(rf),
@@ -769,8 +775,8 @@ rf2 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G
 
 # rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
 
-#p2_nosolution <- predict(rf2, crcdata_nosolution)
-#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+p2_nosolution <- predict(rf2, sample_crcdata_nosolution)
+confusionMatrix(p2_nosolution, test$solution_proposed_YN)
 
 
 hist(treesize(rf2),
@@ -779,6 +785,10 @@ hist(treesize(rf2),
 varImpPlot(rf2,
            main = "Balanced Mode - Top 10 - Variable Importance")
 importance(rf2)
+
+# roc_pred <- prediction(p2_df[2], p2a_df)
+# perf <- performance(roc_pred, "tpr", "fpr")
+# plot(perf)
 ```
 
 
