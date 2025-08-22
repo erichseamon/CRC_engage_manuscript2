@@ -6,10 +6,8 @@ author:
   - J. Leah Jones-Crank
   - Bassel Daher
   - Alyssa Thomas
+  - Erin Cortus
   - Erich Seamon
-  - Ruchie Pathak
-  - Dan Cronan
-  - Meghna Babbar-Sebens
   - Andrew Kliskey
 date: "`r Sys.Date()`"
 always_allow_html: yes
@@ -41,7 +39,7 @@ library(epiDisplay)
 library(caret)
 
 crcdata <- read.csv("./data/crc_data_ES2.csv")
-crcdata_new <- read.csv("./data/crc_data_aug25.csv")
+
 
 #set YN to 01
 require(dplyr)
@@ -792,31 +790,6 @@ varImpPlot(rf2,
            main = "Balanced Mode - Top 10 - Variable Importance")
 importance(rf2)
 
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
-
 # roc_pred <- prediction(p2_df[2], p2a_df)
 # perf <- performance(roc_pred, "tpr", "fpr")
 # plot(perf)
@@ -904,31 +877,6 @@ varImpPlot(rf2,
 importance(rf2)
 
 
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
-
 ```
 
 
@@ -1009,31 +957,6 @@ hist(treesize(rf2),
 varImpPlot(rf2,
            main = "Balanced Mode - Top 10 - Variable Importance")
 importance(rf2)
-
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
 
 
 ```
@@ -1241,31 +1164,6 @@ varImpPlot(rf2,
            main = "Balanced Mode - Top 10 - Variable Importance")
 importance(rf2)
 
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
-
 ```
 
 \newpage
@@ -1347,31 +1245,6 @@ hist(treesize(rf2),
 varImpPlot(rf2,
            main = "Balanced Mode - Top 10 - Variable Importance")
 importance(rf2)
-
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
 
 ```
 
@@ -1455,31 +1328,6 @@ hist(treesize(rf2),
 varImpPlot(rf2,
            main = "Balanced Mode - Top 10 - Variable Importance")
 importance(rf2)
-
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
 
 ```
 
@@ -1574,31 +1422,6 @@ hist(treesize(rf),
 varImpPlot(rf,
            main = "Top 10 - Variable Importance")
 importance(rf)
-
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
 
 
 ```
@@ -1823,32 +1646,6 @@ hist(treesize(rf2),
 varImpPlot(rf2,
            main = "Balanced Model - Top 10 - Variable Importance")
 importance(rf2)
-
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
-
 ```
 
 \newpage
@@ -1938,30 +1735,6 @@ varImpPlot(rf,
            main = "Balanced Model - Top 10 - Variable Importance")
 importance(rf)
 
-#--
-
-# Required libraries
-library(randomForest)
-library(ggplot2)
-
-
-# Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
-var_imp_df <- data.frame(Variable = rownames(var_imp),
-                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
-
-# Sort and select top 10
-var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
-top_vars <- head(var_imp_df, 10)
-
-# Plot
-ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
-  coord_flip() +
-  labs(title = "Top 10 Variable Importance - Random Forest Model",
-       x = "Variable", y = "Mean Decrease in Gini") +
-  theme_minimal()
-
 
 ```
 
@@ -1996,7 +1769,6 @@ importance(rf)
 
 
 ```
-\newpage
 
 ## Representative Decision Tree Plot - Balanced Model - Minus Scaling
 
@@ -2088,5 +1860,27 @@ rep_tree2 <- rpart(solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combi
 
 ```
 
+```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 
+library(rpart)
+library(rpart.plot)
+
+# Make sure your response is a factor for classification
+train$solution_proposed_YN <- as.factor(train$solution_proposed_YN)
+
+# Fit a decision tree using rpart
+tree_model <- rpart(
+  solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
+    ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
+    ST_experts + G_local + G_regional + G_national + G_multination +
+    G_global + G_nogeography + year,
+  data = train,
+  method = "class",  # use "anova" for regression
+  control = rpart.control(cp = 0, minsplit = 2, maxdepth = 5)
+)
+
+# Plot the tree
+rpart.plot(tree_model)
+
+```
