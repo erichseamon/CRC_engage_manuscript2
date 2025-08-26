@@ -24,6 +24,7 @@ mainfont: serif
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(width = 120)
 ```
 
 \newpage
@@ -63,8 +64,10 @@ crcdata <- crcdata %>%
 #fix colnames
 #names(crcdata)[names(crcdata) == 'STE_IAP2_NA'] <- 'STE_IAP2_data_gathering'
 #names(crcdata)[names(crcdata) == 'G_na'] <- 'G_nogeography'
-
+names(crcdata)[names(crcdata) == 'Year'] <- 'year'
 #names(crcdata)[43] <- "SC_researcher"
+
+crcdata <- head(crcdata,-1)
 
 #names(crcdata)[51] <- "G_notdescribed"
 
@@ -106,14 +109,14 @@ kable(df, col.names = c("Variable Name", "Description"), escape = F, caption = "
 
 # Chi-Square Testing
 ## Chi Square Testing: solution proposed or not vs. stakeholder engagement
-
+3
 Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory variable, and engaged stakeholder/did not engage stakeholder as the response variable. 
 
-**ChiSquare = 46: Fishers Exact Test Odds Ratio: 19: Not Independent**
+**ChiSquare = 46: Fishers Exact Test Odds Ratio: 17: Not Independent**
 
-Both chi square and fishers exact test were significant, with a chi square approximation of ~46, which is well above the critical value (3.84 with one degree of freedom).  Fishers Exact Test returned an odds ratio of ~19. The alternative hypothesis: true odds ratio is not equal to 1, therefore the null hypothesis is rejected - the groups are not independent. 
+Both chi square and fishers exact test were significant, with a chi square approximation of ~43, which is well above the critical value (3.84 with one degree of freedom).  Fishers Exact Test returned an odds ratio of ~17. The alternative hypothesis: true odds ratio is not equal to 1, therefore the null hypothesis is rejected - the groups are not independent. 
 
-The Fishers Exact Test defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is 19 times that for an engaged stakeholder".  You could flip the response and explanatory variables, but the odds ratio would stay the same.
+The Fishers Exact Test defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is 17 times that for an engaged stakeholder".  You could flip the response and explanatory variables, but the odds ratio would stay the same.
 
 For more info on this topic see: Kim HY. Statistical notes for clinical researchers: Chi-squared test and Fisher's exact test. Restor Dent Endod. 2017 May;42(2):152-155. doi: 10.5395/rde.2017.42.2.152. Epub 2017 Mar 30. PMID: 28503482; PMCID: PMC5426219.
 
@@ -145,7 +148,7 @@ solution_stakeholder <- as.table(solution_stakeholder)
 summary(solution_stakeholder)
 
 fisher.test(solution_stakeholder)
-barnard.test(76, 465, 15, 19)
+barnard.test(76, 465, 14, 18)
 assocstats(solution_stakeholder)
 
 ```
@@ -387,7 +390,7 @@ ggplot(df, aes(x=group, y=df)) +
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #geography
-df <- t(t(colSums(crcdata[,52:57])))
+df <- t(t(colSums(crcdata[,38:42])))
 df <- df[order(df[,1], decreasing = TRUE),]
 par(mar = c(8,4,4,4))
 #barplot(df, las=2, main="Geographic Location Breakdown")
@@ -396,7 +399,7 @@ par(mar = c(8,4,4,4))
 
 
 df <- data.frame(df)
-rownames(df) <- c("Regional", "Local", "National", "No Geography", "Multinational", "Global")
+rownames(df) <- c("Local", "Regional", "National", "Multinational", "Global")
 df$group <- row.names(df)
 library(dplyr)
 
@@ -411,7 +414,7 @@ library(dplyr)
 #rownames(df) <- c("Transformative", "Representation", "Nominal", "Instrumental")
 #df$group <- row.names(df)
 #df <- c(df[3,], df[4,], df[2,], df[1,])
-df$group <- factor(df$group, levels=c("Regional", "Local", "National", "No Geography", "Multinational", "Global"))
+df$group <- factor(df$group, levels=c("Local", "Regional", "National", "Multinational", "Global"))
 
 ggplot(df, aes(x=group, y=df)) +
     geom_bar(stat='identity', fill="#99CC99")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + guides(col=guide_legend("Geography")) +labs(y= "Count", x = "Geography")
@@ -430,8 +433,8 @@ ggplot(df, aes(x=group, y=df)) +
 
 
 ghodsvali.fit<-glm(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,binomial(link = "logit"), data = crcdata)
-IAP2.fit<-glm(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower,binomial(link = "logit"), data = crcdata)
-local.fit<-glm(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,binomial(link = "logit"), data = crcdata)
+# IAP2.fit<-glm(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower,binomial(link = "logit"), data = crcdata)
+# local.fit<-glm(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,binomial(link = "logit"), data = crcdata)
 
 ```
 
@@ -472,6 +475,7 @@ Odds of Ghodsvali scale predicting whether a solution was proposed or not
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
+ghodsvali.fit<-glm(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,binomial(link = "logit"), data = crcdata)
 logistic.display(ghodsvali.fit)
 
 
@@ -495,7 +499,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=train, proximity=TRUE, importance=TRUE) 
+rf <- randomForest(solution_proposed_YN~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
@@ -858,9 +862,9 @@ Regression of whether Diversity of researchers predicts if a solution was propos
 #Diversity of researchers vs solutions (using ratio)
 
 
-crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
+crcdata$ST_ratio <- rowSums(crcdata[,12:21])/10
 
-rratio_vs_solutions <-glm(solution_proposed_YN ~ R_ratio,family=binomial,data=crcdata)
+rratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
 
 summary(rratio_vs_solutions)
 #logistic.display(rratio_vs_solutions)
@@ -879,9 +883,9 @@ Odds of whether Diversity of researchers predicts if a solution was proposed (Y/
 #Diversity of researchers vs solutions (using ratio)
 
 
-crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
+crcdata$ST_ratio <- rowSums(crcdata[,12:21])/10
 
-rratio_vs_solutions <-glm(solution_proposed_YN ~ R_ratio,family=binomial,data=crcdata)
+rratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
 
 #summary(rratio_vs_solutions)
 logistic.display(rratio_vs_solutions)
@@ -930,7 +934,7 @@ summary(ST_solution)
 
 #geographic area vs solution
 
-geog_solution <- glm(solution_proposed_YN~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, family=binomial, data=crcdata)
+geog_solution <- glm(solution_proposed_YN~G_local+G_regional+G_national+G_multinational+G_global, family=binomial, data=crcdata)
 summary(geog_solution)
 #logistic.display(geog_solution)
 
@@ -964,7 +968,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=train, proximity=TRUE, importance=TRUE) 
+rf <- randomForest(solution_proposed_YN ~G_local+G_regional+G_national+G_multinational+G_global, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 p2 <- predict(rf, test)
@@ -987,7 +991,7 @@ sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
 
 solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
 
-rf2 <- randomForest(solution_proposed_YN ~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+rf2 <- randomForest(solution_proposed_YN ~G_local+G_regional+G_national+G_multinational+G_global, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
 
 # rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
 
@@ -1036,7 +1040,7 @@ ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGi
 
 ## QUESTION: Does the regional location of the study increase the likelihood of proposed/implemented solutions? Regions were grouped in: Europe/Asia, Middle East/Global - and Other.
 
-## RESULTS: A bias-reduced logistic regression indicated that region was significantly associated with whether a solution was proposed, χ²(2, N = 484) = 7.28, p = .026. 
+## RESULTS: A bias-reduced logistic regression indicated that region was significantly associated with whether a solution was proposed, Chisquare = 7.28, p = .026. 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(brglm2)
@@ -1047,8 +1051,8 @@ library(brglm2)
 crcdata$L_region <- as.factor(crcdata$L_region)
 
 crcdata$L_region_3 <- with(crcdata, case_when(
-  L_region_grouped %in% c("Europe", "Asia") ~ "EuropeAsia",
-  L_region_grouped %in% c("Global", "Middle East") ~ "GlobalME",
+  L_region %in% c("Europe", "Asia") ~ "EuropeAsia",
+  L_region %in% c("Global", "Middle East") ~ "GlobalME",
   TRUE ~ "Other"
 ))
 crcdata$L_region_3 <- factor(crcdata$L_region_3)
@@ -1197,7 +1201,7 @@ ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGi
 
 #geographic area vs solution
 
-geog_stakeholdertype <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=crcdata)
+geog_stakeholdertype <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~G_local+G_regional+G_national+G_multinational+G_global, data=crcdata)
 
 summary(geog_stakeholdertype)
 
@@ -1213,7 +1217,7 @@ summary(geog_stakeholdertype)
 
 #geographic area vs solution
 
-geog_engagement_ghodsvali <- lm(cbind(G_notdescribed,G_local,G_regional,G_national,G_multination,G_global)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
+geog_engagement_ghodsvali <- lm(cbind(G_local,G_regional,G_national,G_multinational,G_global)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
 
 summary(geog_engagement_ghodsvali)
 
@@ -1228,13 +1232,15 @@ summary(geog_engagement_ghodsvali)
 
 #RF scales
 
+
+
 library(randomForest)
 library(caret)
 set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multination+G_global+G_nogeography+year+L_region+R_ratio, data=train, proximity=TRUE, importance=TRUE) 
+rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 
@@ -1255,7 +1261,7 @@ library(ggplot2)
 
 
 # Extract variable importance
-var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp <- importance(rf, type = 2)  # type = 2 is MeanDecreaseGini
 var_imp_df <- data.frame(Variable = rownames(var_imp),
                          MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
 
@@ -1290,7 +1296,7 @@ set.seed(2223)
 ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
 train <- crcdata[ind==1,]
 test <- crcdata[ind==2,]
-rf <- randomForest(solution_proposed_YN ~ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multination+G_global+G_nogeography+year+L_region+R_ratio, data=train, proximity=TRUE, importance=TRUE) 
+rf <- randomForest(solution_proposed_YN ~ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio, data=train, proximity=TRUE, importance=TRUE) 
 print(rf)
 
 
@@ -1303,6 +1309,23 @@ varImpPlot(rf,
            main = "Balanced Model - Top 10 - Variable Importance")
 importance(rf)
 
+
+# Extract variable importance
+var_imp <- importance(rf, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
 
 ```
 \newpage
@@ -1322,8 +1345,8 @@ train$solution_proposed_YN <- as.factor(train$solution_proposed_YN)
 tree_model <- rpart(
   solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
     ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
-    ST_experts + G_local + G_regional + G_national + G_multination +
-    G_global + G_nogeography + year + L_region + R_ratio,
+    ST_experts + G_local + G_regional + G_national + G_multinational +
+    G_global + year + L_region_3 + ST_ratio,
   data = train,
   method = "class",  # use "anova" for regression
   control = rpart.control(cp = 0, minsplit = 2, maxdepth = 5)
@@ -1374,8 +1397,8 @@ test <- crcdata[ind == 2, ]
 rf <- randomForest(
   solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
     ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
-    ST_experts + G_local + G_regional + G_national + G_multination +
-    G_global + G_nogeography + year + L_region + R_ratio,
+    ST_experts + G_local + G_regional + G_national + G_multinational +
+    G_global + year + L_region_3 + ST_ratio,
   data = train,
   proximity = TRUE,
   importance = TRUE
@@ -1386,14 +1409,14 @@ rep_tree <- reprtree:::ReprTree(rf, train, metric = "d2")
 
 #single tree
 
-rep_tree2 <- rpart(solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
-    ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
-    ST_experts + G_local + G_regional + G_national + G_multination +
-    G_global + G_nogeography + year + + L_region + R_ratio,
-  data = train)
+# rep_tree2 <- rpart(solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
+#     ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
+#     ST_experts + G_local + G_regional + G_national + G_multinational +
+#     G_global +  year + L_region_3 + ST_ratio,
+#   data = train)
 
 # plot the tree
-#rpart.plot(rpart.plot::as.rpart(rep_tree))
+# rpart.plot(rpart.plot::as.rpart(rep_tree))
 
 ```
 

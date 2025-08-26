@@ -1,11 +1,25 @@
 ---
-title: "Rethinking Stakeholder Engagement: A Multidimensional Framework Inspired by Meta-Analysis of Food, Energy, and Water Research"
-author: "-"
+title: 'TITLE X'
+subtitle: 'Supplemental materials for submittal to X'
+author: 
+  - Paula Williams
+  - J. Leah Jones-Crank
+  - Bassel Daher
+  - Alyssa Thomas
+  - Erich Seamon
+  - Ruchie Pathak
+  - Dan Cronan
+  - Meghna Babbar-Sebens
+  - Andrew Kliskey
 date: "`r Sys.Date()`"
+always_allow_html: yes
 output:
   pdf_document:
     toc: yes
-
+  includes:
+      in_header: header.tex
+params: null
+mainfont: serif
 ---
 
 ```{r setup, include=FALSE}
@@ -16,25 +30,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Supplemental Materials Summary
 
-The benefits for involving stakeholders in research projects are well established.  We investigated recent papers related to food-energy-water systems to assess whether stakeholders were engaged, when they were engaged, which stakeholders were involved, the level of their involvement, whether the needs of stakeholders were considered, and whether stakeholder engagement was evaluated and monitored. Stakeholder engagement theory and research suggest that stakeholder engagement is effective only when it is considered as an integrated process, but our review suggests that this is not common practice.  We developed a framework to assist scientists in engaging stakeholders in an integrated and thoughtful manner. Our framework includes six dimensions:  1. When should stakeholders be engaged and for how long? 2. Who should be engaged (identification and diversity)? 3. What role should stakeholders play? 4. How can researchers meet stakeholder needs?   5. What methods of engagement should be used?  6. How to evaluate and monitor the engagement? 
+This analysis focuses on examining if how stakeholder engagement, and the level of engagement, impacts whether a solution for research outcomes is proposed and/or implemented.  This meta-synthesis of 483 papers were evaluated and coded using several differing engagement scales. Additionally, each paper was coded by the geographic scale, and whether a computational model was used as part of the research. 
 
-We conducted two literature searches: an initial search in 2020 and a follow-up search in 2023 to capture literature published between 2020 and 2023. We conducted the searches in two different online databases, ScienceDirect and WorldCat, to ensure a comprehensive identification of relevant literature. We identified 177 publications from our initial search and 540 publications in our follow up search, resulting in a total of 717 publications. We then manually screened the papers and removed additional papers that did not meet the criteria above on reading the manuscript, resulting in 489 total papers for analysis.
-
-This supplemental materials provides:
-
-* A summary of the variables quantified from the literature reviews;
-* Chi-square testing of whether a solution was proposed or not vs. 1) stakeholder engagement as well as 2) whether a computational model was used;
-* Summary statistics graphs of the literature analysis; and
-* Regression and odds ratio testing for a variety of factors
 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 library(ggplot2)
 library(epiDisplay)
+library(caret)
 
 crcdata <- read.csv("./data/crc_data_ES2.csv")
-
+crcdata_new <- read.csv("./data/crc_data_aug25.csv")
 
 #set YN to 01
 require(dplyr)
@@ -332,7 +339,8 @@ crcdata_new$ghodsvali <- factor(crcdata_new$ghodsvali, levels = c("nominal", "in
 my_colors <- c("#99CC99", "#669999", "#6666CC", "#CC9966")
 
 ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors) + scale_fill_discrete(name = "Ghodsvali Scale")
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors, name = "Ghodsvali Scale")
+
 
 ```
 
@@ -341,7 +349,7 @@ ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) +
 
 png("./images/fews_ghodsvali.png", res=300, width = 1500, height = 1500 )
 ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors) + scale_fill_discrete(name = "Ghodsvali Scale")
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors, name = "Ghodsvali Scale")
 dev.off()
 
 ```
@@ -372,7 +380,7 @@ crcdata_new$IAP2 <- factor(crcdata_new$IAP2, levels = c("data gathering", "infor
 my_colors <- c("#99CC99", "#669999", "#6666CC", "#9966CC", "#CC9966", "#FFCC66")
 
 ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors) + scale_fill_discrete(name = "IAP2 Scale")
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors, name = "IAP2 Scale")
 
 
 ```
@@ -381,8 +389,7 @@ ggplot(crcdata_new, aes(fill=IAP2, x=year)) +
 
 png("./images/fews_iap2.png", res=300, width = 1500, height = 1500 )
 ggplot(crcdata_new, aes(fill=IAP2, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors) + scale_fill_discrete(name = "IAP2 Scale")
-dev.off()
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors, name = "IAP2 Scale")
 
 ```
 
@@ -413,7 +420,7 @@ crcdata_new$local <- factor(crcdata_new$local, levels = c("researcher", "data ga
 my_colors <- c("#66FF33", "#339900", "#99CC99", "#669999", "#6666CC", "#9966CC", "#CC9966", "#FFCC66")
 
 ggplot(crcdata_new, aes(fill=local, x=year)) + 
-    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors)+ scale_fill_discrete(name = "Local Scale")
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors, name = "Local Scale")
 
 
 
@@ -666,15 +673,37 @@ ggplot(df, aes(x=group, y=df)) +
 
 #Odds of stakeholder scale predicting whether a solution was proposed or not
 
-ghodsvali.fit<-glm(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,family=binomial,data=crcdata)
-IAP2.fit<-glm(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower,family=binomial,data=crcdata)
+#set.seed(101) 
+#sample = sample.split(crcdata, SplitRatio = .75)
+#train = subset(crcdata, sample == TRUE)
+#test  = subset(crcdata, sample == FALSE)
 
-local.fit<-glm(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,family=binomial,data=crcdata)
+
+ghodsvali.fit<-glm(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,binomial(link = "logit"), data = crcdata)
+IAP2.fit<-glm(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower,binomial(link = "logit"), data = crcdata)
+local.fit<-glm(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,binomial(link = "logit"), data = crcdata)
 
 ```
 
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#--sequentially compares the smaller model with the next more 
+#--complex model by adding one variable in each step. Each of those 
+#--comparisons is done via a likelihood ratio test 
+
+#anova_ghodsvali_logit <- anova(ghodsvali.fit, test="Chisq")
+#anova_IAP2_logit <- anova(IAP2.fit, test="Chisq")
+#anova_local_logit <- anova(local.fit, test="Chisq")
+
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#prediction_accuracy <- predict(ghodsvali.fit, test, type="response", interval="confidence")
+```
+
 \newpage
-# Regression Testing
+# Ghodsvali Scale Modeling - solution proposed
 
 ## Ghodsvali scale regression
 
@@ -700,6 +729,104 @@ logistic.display(ghodsvali.fit)
 
 \newpage
 
+## Ghodsvali Ensembled Decision Tree with Feature Importance 
+
+Ghodsvali ensembled decision tree with solution proposed being the dependent variable
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+library(pROC)
+library(ROCR)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+p2 <- predict(rf, test)
+# p2 <- predict(rf, test, type="prob")
+# p2a <- predict(rf, test)
+# p2_df <- as.data.frame(p2)
+# p2a_df <- as.data.frame(p2a)
+confusionMatrix(p2, test$solution_proposed_YN)
+
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+ind_rev <- sample(2, nrow(solution_proposed_YN_combo), replace = TRUE, prob = c(0.7, 0.3))
+train_rev <- solution_proposed_YN_combo[ind_rev==1,]
+test_rev <- solution_proposed_YN_combo[ind_rev==2,]
+
+rf2 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, test_rev)
+confusionMatrix(p2_nosolution, test_rev$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
+# roc_pred <- prediction(p2_df[2], p2a_df)
+# perf <- performance(roc_pred, "tpr", "fpr")
+# plot(perf)
+```
+
+
+\newpage
+
+# IAP2 Scale Modeling - solution proposed
+
 ## IAP2 scale regression 
 
 IAP2 scale regression testing on whether a solution was proposed or not
@@ -721,8 +848,93 @@ Odds of IAP2 scale predicting whether a solution was proposed or not
 logistic.display(IAP2.fit)
 
 ```
+\newpage
+
+## IAP2 Ensembled Decision Tree with Feature Importance 
+
+IAP2 ensembled decision tree with solution proposed being the dependent variable
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+p2 <- predict(rf, test)
+confusionMatrix(p2, test$solution_proposed_YN)
+
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
+
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
+```
+
 
 \newpage
+
+# Local Scale Modeling - solution proposed 
 
 ## Local scale regression
 
@@ -746,12 +958,94 @@ logistic.display(local.fit)
 
 ```
 
+## Local scale Ensembled Decision Tree with Feature Importance 
+
+Local scale ensembled decision tree with solution proposed being the dependent variable
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+p2 <- predict(rf, test)
+confusionMatrix(p2, test$solution_proposed_YN)
+
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
+
+```
 
 \newpage
 
-## Engagement vs. solution - regression testing
+# Stakeholder Engagement Modeling - solution proposed
 
-Regression of whether stakeholder engagement (Y/N) predicts if a solution was proposed (Y/N)
+## QUESTION: Does engaging stakeholders increase the likelihood that a solution will be proposed/implemented?
+
+Here we use classical logistic regression using a binomial function to determine if engaging stakeholders (Y/N) increases the odds that a solution will be proposed.
+
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -760,15 +1054,16 @@ Regression of whether stakeholder engagement (Y/N) predicts if a solution was pr
 stakeholder_vs_solutions <-glm(solution_proposed_YN ~S_stakeholder_engagment_YN,family=binomial,data=crcdata)
 
 summary(stakeholder_vs_solutions)
-logistic.display(stakeholder_vs_solutions)
+#logistic.display(stakeholder_vs_solutions)
 
 ```
 
+
 \newpage
 
-## Engagement vs. solution - odds
+## ODDS RATIOS: Does engaging stakeholders increase the likelihood that a solution will be proposed/implemented?
 
-Odds of whether stakeholder engagement (Y/N) predicts if a solution was proposed (Y/N)
+Odds of whether engaging stakeholders increases the likelihood that a solution will be proposed?
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -784,9 +1079,11 @@ logistic.display(stakeholder_vs_solutions)
 
 \newpage
 
-## Use of computational model vs. solution - regression testing
+# Compuational Model used Modeling - solution proposed
 
-Regression of whether a computational model was used predicts if a solution was proposed (Y/N)
+## QUESTION: Does the use of a computational model increase the likelihood that a solution will be proposed?
+
+Here we use classical logistic regression using a binomial function to determine if the use of a computational model (Y/N) increases the odds that a solution will be proposed.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -795,32 +1092,405 @@ Regression of whether a computational model was used predicts if a solution was 
 model_vs_solutions <-glm(solution_proposed_YN ~S_model_YN,family=binomial,data=crcdata)
 
 summary(model_vs_solutions)
-logistic.display(model_vs_solutions)
+#logistic.display(model_vs_solutions)
 
 ```
 
 
 \newpage
 
-## Use of computational model vs. solution - odds
+## ODDS RATIOS: Does the use of a computational model increase the likelihood that a solution will be proposed?
 
-Odds of whether a computational model was used predicts if a solution was proposed (Y/N)
+Odds of whether the use of a computational model increases the likelihood that a solution will be proposed.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #Use of computational model vs. solutions
 
-model_vs_solutions <-glm(solution_proposed_YN ~S_model_YN,family=binomial,data=crcdata)
+solutions_vs_model <-glm(solution_proposed_YN ~ S_model_YN,family=binomial,data=crcdata)
 
 #summary(model_vs_solutions)
-logistic.display(model_vs_solutions)
+logistic.display(solutions_vs_model)
+
+```
+
+
+\newpage
+
+# Computational model AND Stakeholder Engagement - solution proposed
+
+## QUESTION: Does the use of a computational model PLUS stakeholder engagement increase the likelihood that a solution is proposed/implemented?
+
+Regression testing for Ghodsvali scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Use of a computational model AND stakeholder engagement - solution proposed
+
+model_engagement_solution <-glm(solution_proposed_YN ~ S_model_YN * S_stakeholder_engagment_YN,family=binomial,data=crcdata)
+
+summary(model_engagement_solution)
+
+```
+
+\newpage
+
+## ODDS RATIOS: Does the use of a computational model PLUS stakeholder engagement increase the likelihood that a solution is proposed/implemented?
+
+Odds ratios of whether the use of a computational model PLUS stakeholder engagement increase the likelihood that a solution is proposed/implemented?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Use of a computational model AND stakeholder engagement - solution proposed
+
+logistic.display(model_engagement_solution)
+
+```
+
+\newpage
+
+# Ghodsvali Modeling - Computational Model
+
+## QUESTION: As the level of Ghodsvali stakeholder engagement increases, does the likelihood of using a computational model increase?
+
+Regression testing for Ghodsvali scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Use of computational model vs. solutions
+
+ghodsvali_vs_model <-glm(S_model_YN ~ STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,family=binomial,data=crcdata)
+local_vs_model <-glm(S_model_YN ~ SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,family=binomial,data=crcdata)
+IAP2_vs_model <-glm(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower,family=binomial,data=crcdata)
+
+#summary(model_vs_solutions)
+#logistic.display(scales_vs_model)
+
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+summary(ghodsvali_vs_model)
+
+```
+
+\newpage
+
+## ODDS RATIOS: As the level of Ghodsvali stakeholder engagement increases, does the odds of using a computational model increase?
+
+Odds ratio for Ghodsvali scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+logistic.display(ghodsvali_vs_model)
+
+```
+
+
+\newpage
+
+## DECISION TREE: Ghodsvali Ensembled Decision Tree vs whether a computational model was used
+
+Ensembled decision tree for Ghodsvali scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(S_model_YN ~ STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+p2 <- predict(rf, test)
+confusionMatrix(p2, test$solution_proposed_YN)
+
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(S_model_YN ~ STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
+```
+
+\newpage
+
+# IAP2 Modeling - Computational Model
+
+## QUESTION: As the level of IAP2 stakeholder engagement increases, does the likelihood of using a computational model increase?
+
+Regression testing for IAP2 scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+summary(IAP2_vs_model)
+
+```
+
+\newpage
+
+## ODDS RATIOS: As the level of Ghodsvali stakeholder engagement increases, does the odds of using a computational model increase?
+
+Odds ratio for IAP2 scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+logistic.display(IAP2_vs_model)
 
 ```
 \newpage
 
+## DECISION TREE: IAP2 Ensembled Decision Tree vs whether a computational model was used
+
+Ensembled decision tree for IAP2 scale used to predict if a computational model was used (Y/N)
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+p2 <- predict(rf, test)
+confusionMatrix(p2, test$solution_proposed_YN)
+
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
+```
+
+\newpage
+
+# Local Modeling - Computational Model
+
+## QUESTION: As the level of Local scale stakeholder engagement increases, does the likelihood of using a computational model increase?
+
+Regression testing for Local scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+summary(local_vs_model)
+
+```
+
+\newpage
+
+## ODDS RATIOS: As the level of Ghodsvali stakeholder engagement increases, does the odds of using a computational model increase?
+
+Odds ratio for Local scale used to predict if a computational model was used (Y/N)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+logistic.display(local_vs_model)
+
+```
+
+\newpage
+
+## DECISION TREE: Local scale Ensembled Decision Tree vs whether a computational model was used
+
+Ensembled decision tree for Local scale used to predict if a computational model was used (Y/N)
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(S_model_YN ~ SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+p2 <- predict(rf, test)
+confusionMatrix(p2, test$solution_proposed_YN)
+
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(S_model_YN ~ STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Mode - Top 10 - Variable Importance")
+importance(rf2)
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
+```
+
+
+\newpage
+
 ## Diversity of stakeholders vs solution
 
-Regression of whether Diversity of stakeholders predicts if a solution was proposed (Y/N).  In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
+## QUESTION: Does the diversity of stakeholders increase the likelihood that a solution will be proposed?
+
+Regression testing of whether Diversity of stakeholders predicts if a solution was proposed (Y/N).  In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -837,43 +1507,109 @@ summary(stratio_vs_solutions)
 
 \newpage
 
-## Diversity of stakeholders vs solution - odds
-
-Odds whether Diversity of stakeholders predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
+## ODDS RATIOS: Does the diversity of stakeholders increase the likelihood that a solution will be proposed?
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #Diversity of stakeholders vs solutions (using ratio)
 
-crcdata$ST_ratio <- rowSums(crcdata[,23:31])/9
+logistic.display(stratio_vs_solutions)
 
-stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
+```
+
+## QUESTION: If diversity of stakeholders does not increase proposing/implementing solutions, which stakeholders are more associated with proposing/implementing solutions?
+
+Regression testing for diversity of stakeholders used to predict whether a solution was proposed
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_public + ST_university + ST_experts,family=binomial,data=crcdata)
+
+summary(stratio_vs_solutions)
+
+#logistic.display(stratio_vs_solutions)
+
+```
+
+
+## ODDS RATIOS: Diversity of stakeholders vs solution
+
+Odds whether Diversity of stakeholders predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry  + ST_public + ST_university + ST_experts,family=binomial,data=crcdata)
 
 #summary(stratio_vs_solutions)
 logistic.display(stratio_vs_solutions)
 
 ```
 
-\newpage
-
-## Diversity of stakeholders vs solution - full predictors
+## DECISION TREE: Ensembed Decision Tree - Diversity of stakeholders vs solution -->
 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
-#Diversity of stakeholders vs solutions (using ratio)
+#RF scales
 
-crcdata$ST_ratio <- rowSums(crcdata[,23:31])/10
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(solution_proposed_YN ~ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_public + ST_university + ST_experts, data=train, proximity=TRUE, importance=TRUE)
+print(rf)
 
-stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_public + ST_university + ST_experts,family=binomial,data=crcdata)
+p2 <- predict(rf, test)
+confusionMatrix(p2, test$solution_proposed_YN)
 
-summary(stratio_vs_solutions)
-#logistic.display(stratio_vs_solutions)
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
 
 ```
 
+
+
 \newpage
-## Diversity of researchers vs solution - regression testing
+
+# Researcher Diversity Modeling - solution proposed
+
+## QUESTION: Does the diversity of researchers increases the likelihood that a solution will be proposed?
 
 Regression of whether Diversity of researchers predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of researcher types involved, divided by the total number of possible researcher options.  A ratio which is closer to 1 has a greater level of researcher diversity.
 
@@ -893,7 +1629,8 @@ summary(rratio_vs_solutions)
 
 
 \newpage
-## Diversity of researchers vs solution - odds
+
+## ODDS RATIOS: Does the diversity of researchers increases the likelihood that a solution will be proposed?
 
 Odds of whether Diversity of researchers predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of researcher types involved, divided by the total number of possible researcher options.  A ratio which is closer to 1 has a greater level of researcher diversity.
 
@@ -932,7 +1669,9 @@ logistic.display(rratio_vs_solutions)
 
 \newpage
 
-## Stakeholder type vs level of engagement (Ghodsvali) - regression testing
+# Stakeholder Engagement Modeling - Ghodsvali
+
+## Regression Testing - Stakeholder type vs level of engagement (Ghodsvali)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -958,7 +1697,9 @@ summary(ST_engagement)
 
 \newpage
 
-## Stakeholder type vs level of engagement (IAP2) - regression testing
+# Stakeholder Engagement Modeling - IAP2
+
+## Regression Testing - Stakeholder type vs level of engagement (IAP2)
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -972,22 +1713,24 @@ summary(ST_engagement_IAP2)
 
 \newpage
 
-## Stakeholder type vs level of engagement (local) - regression testing
+# Stakeholder Engagement Modeling - Local
+
+## Regression Testing - Stakeholder type vs level of engagement (local) 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #stakeholder type vs level of engagement local
 
-ST_engagement_IAP2<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,data=crcdata)
+ST_engagement_local<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,data=crcdata)
 
-summary(ST_engagement_IAP2)
+summary(ST_engagement_local)
 
 
 ```
 
 \newpage
 
-## Stakeholder type vs solution - regression testing
+## Regression Testing - Stakeholder type vs solution 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1001,7 +1744,9 @@ summary(ST_solution)
 
 \newpage
 
-## Geographic area vs solution - regression testing
+# Geographic Location Modeling - solution proposed
+
+## QUESTION: Does the geographic location of the study increase the likelihood of proposed/implemented solutions?
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1009,14 +1754,14 @@ summary(ST_solution)
 
 geog_solution <- glm(solution_proposed_YN~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, family=binomial, data=crcdata)
 summary(geog_solution)
-logistic.display(geog_solution)
+#logistic.display(geog_solution)
 
 
 ```
 
 \newpage
 
-## Geographic area vs solution - odds
+## ODDS RATIOS: Does the geographic location of the study increase the likelihood of proposed/implemented solutions?
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1029,7 +1774,88 @@ logistic.display(geog_solution)
 
 \newpage
 
-## stakeholder type vs geographic area
+## DECISON TREE: Geographic area Ensembed Decision Tree - Geographic area vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(solution_proposed_YN ~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+p2 <- predict(rf, test)
+confusionMatrix(p2, test$solution_proposed_YN)
+
+hist(treesize(rf),
+     main = "No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Top 10 - Variable Importance")
+importance(rf)
+
+#----new model on data where there is no solution proposed
+
+crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "Y")
+crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagment_YN == "N")
+sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+
+solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+
+rf2 <- randomForest(solution_proposed_YN ~G_notdescribed+G_local+G_regional+G_national+G_multination+G_global, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+# rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+
+p2_nosolution <- predict(rf2, crcdata_nosolution)
+#confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+
+
+hist(treesize(rf2),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf2,
+           main = "Balanced Model - Top 10 - Variable Importance")
+importance(rf2)
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
+```
+
+\newpage
+
+# Multivariate Stakeholder Engagement Modeling - geographic area
+
+## Regression Testing - stakeholder type vs geographic area - interactions and effects
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1043,7 +1869,9 @@ summary(geog_stakeholdertype)
 
 \newpage
 
-## Geographic area vs engagment (Ghodsvali)
+# Multivariate Geographic Modeling - Ghodsvali
+
+## Regression Testing - Geographic area vs engagment (Ghodsvali) - interactions and effects
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1056,7 +1884,9 @@ summary(geog_engagment_ghodsvali)
 ```
 \newpage
 
-## Geographic area vs engagment (IAP2)
+# Multivariate Geographic Modeling - IAP2
+
+## Regression Testing - Geographic area vs engagment (IAP2) - interactions and effects
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 
@@ -1067,7 +1897,9 @@ summary(geog_engagment_IAP2)
 ```
 \newpage
 
-## Geographic area vs engagment (local)
+# Multivariate Geographic Modeling - Local
+
+## Regression Testing - Geographic area vs engagment (local) - interactions and effects
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 
@@ -1076,17 +1908,185 @@ geog_engagment_local <- lm(cbind(G_notdescribed,G_local,G_regional,G_national,G_
 summary(geog_engagment_local)
 
 ```
-
 
 \newpage
 
-## Geographic area vs engagment (local)
+# ADDITIONAL ANALYSIS -  ALL VARIABLES 
+
+## Looking at Decision Tree for all variables - with Ghodsvali scale - with solution proposed as dependent variable
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multination+G_global+G_nogeography+year, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+
+#----new model on data where there is no solution proposed
+
+hist(treesize(rf),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Balanced Model - Top 10 - Variable Importance")
+importance(rf)
+
+#--
+
+# Required libraries
+library(randomForest)
+library(ggplot2)
+
+
+# Extract variable importance
+var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+var_imp_df <- data.frame(Variable = rownames(var_imp),
+                         MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+
+# Sort and select top 10
+var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+top_vars <- head(var_imp_df, 10)
+
+# Plot
+ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Variable Importance - Random Forest Model",
+       x = "Variable", y = "Mean Decrease in Gini") +
+  theme_minimal()
+
+
+```
+
+\newpage
+
+# ADDITIONAL ANALYSIS -  ALL VARIABLES - minus scaling
+
+## Looking at Decision Tree for all variables - minus the Ghodsvali scale - with solution proposed as dependent variable
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+library(randomForest)
+library(caret)
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind==1,]
+test <- crcdata[ind==2,]
+rf <- randomForest(solution_proposed_YN ~ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multination+G_global+G_nogeography+year, data=train, proximity=TRUE, importance=TRUE) 
+print(rf)
+
+
+#----new model on data where there is no solution proposed
+
+hist(treesize(rf),
+     main = "Balanced Model - No. of Nodes for the Trees",
+     col = "green")
+varImpPlot(rf,
+           main = "Balanced Model - Top 10 - Variable Importance")
+importance(rf)
+
+
+```
+\newpage
+
+## Representative Decision Tree Plot - Balanced Model - Minus Scaling
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 
-geog_engagment_local <- lm(cbind(G_notdescribed,G_local,G_regional,G_national,G_multination,G_global)~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement, data=crcdata)
+library(rpart)
+library(rpart.plot)
 
-summary(geog_engagment_local)
+# Make sure your response is a factor for classification
+train$solution_proposed_YN <- as.factor(train$solution_proposed_YN)
+
+# Fit a decision tree using rpart
+tree_model <- rpart(
+  solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
+    ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
+    ST_experts + G_local + G_regional + G_national + G_multination +
+    G_global + G_nogeography + year,
+  data = train,
+  method = "class",  # use "anova" for regression
+  control = rpart.control(cp = 0, minsplit = 2, maxdepth = 5)
+)
+
+# Plot the tree
+rpart.plot(tree_model)
 
 ```
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(randomForest)
+library(reprtree)
+library(rpart)
+library(rpart.plot)
+# Generate representative tree from random forest
+rep_tree <- reprtree:::ReprTree(rf, train, metric = "d2")
+
+#reprtree::plot.reprtree(rep_tree$tree)
+
+
+# Step 2: Plot it using rpart.plot
+#rpart.plot::rpart.plot(rep_tree$tree)
+
+
+
+
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+# Load necessary packages
+library(randomForest)
+library(reprtree)
+library(rpart.plot)
+
+# Ensure your outcome is a factor (classification)
+crcdata$solution_proposed_YN <- as.factor(crcdata$solution_proposed_YN)
+
+# Train-test split
+set.seed(2223)
+ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+train <- crcdata[ind == 1, ]
+test <- crcdata[ind == 2, ]
+
+# Fit random forest
+rf <- randomForest(
+  solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
+    ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
+    ST_experts + G_local + G_regional + G_national + G_multination +
+    G_global + G_nogeography + year,
+  data = train,
+  proximity = TRUE,
+  importance = TRUE
+)
+
+# Generate representative tree
+rep_tree <- reprtree:::ReprTree(rf, train, metric = "d2")
+
+#single tree
+
+rep_tree2 <- rpart(solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
+    ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
+    ST_experts + G_local + G_regional + G_national + G_multination +
+    G_global + G_nogeography + year,
+  data = train)
+
+# plot the tree
+#rpart.plot(rpart.plot::as.rpart(rep_tree))
+
+```
+
+
+

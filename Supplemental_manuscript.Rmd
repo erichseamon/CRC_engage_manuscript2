@@ -1,0 +1,2366 @@
+---
+title: 'TITLE X'
+subtitle: 'Supplemental materials for submittal to X'
+author: 
+  - Paula Williams
+  - J. Leah Jones-Crank
+  - Bassel Daher
+  - Alyssa Thomas
+  - Erich Seamon
+  - Ruchie Pathak
+  - Dan Cronan
+  - Meghna Babbar-Sebens
+  - Andrew Kliskey
+date: "`r Sys.Date()`"
+always_allow_html: yes
+output:
+  pdf_document:
+    toc: yes
+  includes:
+      in_header: header.tex
+params: null
+mainfont: serif
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width = 120)
+```
+
+\newpage
+
+# Supplemental Materials Summary
+
+This analysis focuses on examining if how stakeholder engagement, and the level of engagement, impacts whether a solution for research outcomes is proposed and/or implemented.  This meta-synthesis of 483 papers were evaluated and coded using several differing engagement scales. Additionally, each paper was coded by the geographic scale, and whether a computational model was used as part of the research. 
+
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+library(ggplot2)
+library(epiDisplay)
+library(caret)
+
+#crcdata <- read.csv("./data/crc_data_ES2.csv")
+crcdata <- read.csv("./data/crc_data_aug25.csv")
+
+#remove citation
+
+crcdata <- crcdata[, -which(names(crcdata) == "Citation")]
+
+#set YN to 01
+require(dplyr)
+crcdata <- crcdata %>%
+  mutate(solution_proposed_YN = ifelse(solution_proposed_YN == "N",0,1))
+
+require(dplyr)
+crcdata <- crcdata %>%
+  mutate(solution_implemented_YN = ifelse(solution_implemented_YN == "N",0,1))
+
+require(dplyr)
+crcdata <- crcdata %>%
+  mutate(S_stakeholder_engagement_YN = ifelse(S_stakeholder_engagement_YN == "N",0,1))
+
+#fix colnames
+#names(crcdata)[names(crcdata) == 'STE_IAP2_NA'] <- 'STE_IAP2_data_gathering'
+#names(crcdata)[names(crcdata) == 'G_na'] <- 'G_nogeography'
+names(crcdata)[names(crcdata) == 'Year'] <- 'year'
+#names(crcdata)[43] <- "SC_researcher"
+
+crcdata <- head(crcdata,-1)
+
+#names(crcdata)[51] <- "G_notdescribed"
+
+
+```
+
+
+\newpage
+
+# Variable Summary
+
+Below is a list of the categorical variables generated from the literature reviews
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(knitr)
+library(kableExtra)
+df <- data.frame(Variables = c("Year", "Solution Proposed", "Solution Implemented", "Solution Type", "Researcher Type", "Stakeholder Type", "Stakeholder engagement Scale - Ghodsvali", "Geographical Type", "Region"), Description = linebreak(c("Year of citation", "Was a solution proposed?", "Was a solution implemented?","If a solution was proposed, what was the solution type? Groups include: Technology, Policy, Institutional, Social, Economic, Ecological, and Educational.", "What was the research type?  Groups include: NGO, English, Math, Computer Science, Physics, Engineering, Interdisciplinary, Social Science, Economics, Agriculture, and Other","What was the stakeholder type? Groups include: Farmers, Combined Government, Combined Coalition, Combined Industry, Migrants, Youth, Public, Univerity, and Experts", "If a stakeholder was engaged, categorization of the engagement using the Ghodsvali scale. Groups include: Nominal, Instrumental, Representation, and Transformative", "What the geography type? Groups include: Not Described, Local, Regional, National, Multinational, Global, and No Geography", "What was the country?")))
+kable(df, col.names = c("Variable Name", "Description"), escape = F, caption = "Table T1: Variable Descriptions") %>% column_spec(2, width = "2in") %>% column_spec(c(1:2), width = "2.5in") %>% kable_styling(full_width = FALSE,latex_options = c("hold_position", "scale_down"), font_size = 8) %>% collapse_rows(columns = 2) %>% kable_classic_2(full_width = F) %>% row_spec(0,bold=TRUE)
+
+```
+
+
+<!-- \newpage -->
+
+<!-- # Variable Summary REFINED -->
+
+<!-- Below is a list of the categorical variables generated from the literature reviews REFINED -->
+
+<!-- ```{r echo=FALSE, warning=FALSE, message=FALSE} -->
+<!-- library(knitr) -->
+<!-- library(kableExtra) -->
+<!-- df <- data.frame(Variables = c("Year", "Solution Proposed", "Solution Implemented",  "Stakeholder Type", "Stakeholder engagement Scale - Ghodsvali", "Stakeholder engagement Scale - IAP2", "Stakeholder Engagement Scale - Local"), Description = linebreak(c("Year of citation", "Was a solution proposed?", "Was a solution implemented?","What was the stakeholder type? Groups include: Farmers, Combined Government, Combined Coalition, Combined Industry, Migrants, Youth, Public, Univerity, and Experts", "If a stakeholder was engaged, categorization of the engagement using the Ghodsvali scale. Groups include: Nominal, Instrumental, Representation, and Transformative", "If a stakeholder was engaged, categorization of the engagement using the IAP2 scale. Groups include: Data Gathering, Inform, Consult, Involve, Collaborate, and Empower", "If a stakeholder was engaged, categorization of the engagement using a customized scale. Groups include: Researcher, Data Gathering, Inform, Perspectives, Planning, Identify, Envision, and Implement"))) -->
+<!-- kable(df, col.names = c("Variable Name", "Description"), escape = F, caption = "Table T1: Variable Descriptions") %>% column_spec(2, width = "2in") %>% column_spec(c(1:2), width = "2.5in") %>% kable_styling(full_width = FALSE,latex_options = c("hold_position", "scale_down"), font_size = 8) %>% collapse_rows(columns = 2) %>% kable_classic_2(full_width = F) %>% row_spec(0,bold=TRUE)  -->
+
+<!-- ``` -->
+
+
+\newpage
+
+# Chi-Square Testing
+## Chi Square Testing: solution proposed or not vs. stakeholder engagement
+3
+Chi Square and Fishers Exact Test on contingency table with Solution/No Solution as the explanatory variable, and engaged stakeholder/did not engage stakeholder as the response variable. 
+
+**ChiSquare = 46: Fishers Exact Test Odds Ratio: 17: Not Independent**
+
+Both chi square and fishers exact test were significant, with a chi square approximation of ~43, which is well above the critical value (3.84 with one degree of freedom).  Fishers Exact Test returned an odds ratio of ~17. The alternative hypothesis: true odds ratio is not equal to 1, therefore the null hypothesis is rejected - the groups are not independent. 
+
+The Fishers Exact Test defaults to associating the odds ratio (which can represent effect size) with the first cell. In this instance "The odds of having a solution is 17 times that for an engaged stakeholder".  You could flip the response and explanatory variables, but the odds ratio would stay the same.
+
+For more info on this topic see: Kim HY. Statistical notes for clinical researchers: Chi-squared test and Fisher's exact test. Restor Dent Endod. 2017 May;42(2):152-155. doi: 10.5395/rde.2017.42.2.152. Epub 2017 Mar 30. PMID: 28503482; PMCID: PMC5426219.
+
+
+```{r, echo=FALSE}
+library(Barnard)
+library(vcd)
+
+
+crcdata$solution_proposed_YN <- as.factor(crcdata$solution_proposed_YN)
+crcdata$S_stakeholder_engagement_YN <- as.factor(crcdata$S_stakeholder_engagement_YN)
+crcdata$solution_implemented_YN <- as.factor(crcdata$solution_implemented_YN)
+
+levels(crcdata$S_stakeholder_engagement_YN) = c("N", "Y")
+levels(crcdata$S_stakeholder_engagement_YN) = c("N", "Y")
+levels(crcdata$solution_proposed_YN) = c("N", "Y")
+levels(crcdata$solution_implemented_YN) = c("N", "Y")
+
+crcdata_table <- table(crcdata$solution_proposed_YN, crcdata$S_stakeholder_engagement_YN)
+#colnames(crcdata_table) <- c("NE", "E")
+
+solution_stakeholder <- crcdata_table
+
+names(dimnames(solution_stakeholder)) <- c('solution','stakeholder')
+solution_stakeholder
+
+solution_stakeholder <- as.table(solution_stakeholder)
+
+summary(solution_stakeholder)
+
+fisher.test(solution_stakeholder)
+barnard.test(76, 465, 14, 18)
+assocstats(solution_stakeholder)
+
+```
+
+\newpage
+
+# Summary Statistics Graphs
+
+## Were solutions proposed in the set of all papers?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+ggplot(crcdata,aes(x=solution_proposed_YN, fill=year)) + ggtitle("Solution Proposed: Y=18") + labs(x="Was a solution proposed?") +
+  geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal() + theme_minimal()+
+  theme(text = element_text(),
+        axis.text.x = element_text(angle = 0, hjust = 1)) 
+
+```
+\newpage
+
+## Were solutions implemented in the set of all papers?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+ggplot(crcdata,aes(x=solution_implemented_YN, fill=year)) + ggtitle("Solution Implemented: Y=11") + labs(x="Was a solution implemented?") + geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal()+
+  theme(text = element_text(),
+        axis.text.x = element_text(angle = 0, hjust = 1)) 
+
+```
+\newpage
+
+## What were the solution types?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+# par(mar = c(8,4,4,4))
+# plot3 <- barplot(colSums(crcdata[,4:10]), las=2, main="Solution Types: N=18", names.arg = c("Technological", "Policy", "Institutional", "Social", "Economic", "Ecological", "Educational"))
+
+plot3_data <- colSums(crcdata[,4:10])
+p3a <- as.data.frame(plot3_data)
+p3a$group <- c("Technological", "Policy", "Institutional", "Social", "Economic", "Ecological", "Educational")
+
+# 
+ggplot(p3a, aes(x=group, y=plot3_data)) + geom_bar(stat="identity",fill="#99CC99") + theme_bw() + theme(axis.text.x = element_text(angle = 90, vjust = 1, hjust=1)) +
+  xlab("Solution Types") + ylab("Count")
+
+
+```
+\newpage
+
+## Were stakeholders engaged?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+# nrow(subset(crcdata, solution_proposed_YN == "1"))/nrow(subset(crcdata, solution_proposed_YN == "0"))
+# 
+# nrow(subset(crcdata, solution_implemented_YN == "1"))/nrow(subset(crcdata, solution_implemented_YN == "0"))
+
+
+#stakeholder
+#par(mar = c(4,4,4,4))
+#barplot(table(crcdata$S_stakeholder_engagement_YN), main = "Stakeholder engagement: Y=92")
+
+ggplot(crcdata,aes(x=S_stakeholder_engagement_YN, fill=year)) + ggtitle("Stakeholder Engagement: YES=92") + labs(x="Were stakeholders engaged?") +
+  geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal()
+
+```
+\newpage
+
+## All FEWS papers by year
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+crcdata_remove2011 <- subset(crcdata, year != "2011")
+ggplot(crcdata_remove2011, aes(x=year)) + 
+    geom_bar(stat="count")+theme_bw() + scale_x_continuous(breaks = crcdata$year) +
+  geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+
+```
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, results=FALSE}
+#year
+
+png("./images/fews_year.png", res=300, width = 1500, height = 1500 )
+ggplot(crcdata_remove2011, aes(x=year)) + 
+    geom_bar(stat="count")+theme_bw() + scale_x_continuous(breaks = crcdata$year) +
+  geom_bar(stat = "count", position = "dodge", fill="#99CC99") + theme_minimal() + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+dev.off()
+
+
+```
+
+
+\newpage
+
+## Level of stakeholder engagement by year - Ghodsvali scale
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+library(dplyr)
+
+crcdata_new <- crcdata %>% 
+  mutate(ghodsvali = sprintf("%d_%d_%d_%d", STE_G_nominal, STE_G_instrumental, STE_G_representation, STE_G_transformative))
+
+crcdata_new <- crcdata_new[!(crcdata_new$ghodsvali %in% "0_0_0_0"),]
+
+library(dplyr)
+crcdata_new <- crcdata_new %>%
+    mutate(ghodsvali = recode(ghodsvali, '0_0_0_0' = 'none', '1_0_0_0' = 'nominal', '0_1_0_0' =  'instrumental', '0_0_1_0' = 'representative',  '0_0_0_1' = 'transformative' ))
+
+crcdata_new$ghodsvali <- as.factor(crcdata_new$ghodsvali)
+
+
+crcdata_new$ghodsvali <- factor(crcdata_new$ghodsvali, levels = c("nominal", "instrumental", "representative", "transformative"))
+
+my_colors <- c("#99CC99", "#669999", "#6666CC", "#CC9966")
+
+ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors, name = "Ghodsvali Scale")
+
+
+```
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE, results=FALSE}
+
+png("./images/fews_ghodsvali.png", res=300, width = 1500, height = 1500 )
+ggplot(crcdata_new, aes(fill=ghodsvali, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_new$year) + scale_fill_manual(values = my_colors, name = "Ghodsvali Scale")
+dev.off()
+
+```
+
+\newpage
+
+## Stakeholder engagement by year
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#year
+library(dplyr)
+crcdata_st <- read.csv("./data/crc_data_ES2.csv")
+
+
+
+my_colors <- c("#99CC99",  "#CC9966")
+
+crcdata_stremove2011 <- subset(crcdata_st, year != "2011")
+colnames(crcdata_stremove2011)[22] <- "Stakeholder Engagement"
+ggplot(crcdata_stremove2011, aes(fill=`Stakeholder Engagement`, x=year)) + 
+    geom_bar(position="stack", stat="count")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + scale_x_continuous(breaks = crcdata_st$year) + guides(col=guide_legend("Stakeholder Engagement? Yes or No")) + scale_fill_manual(values = my_colors)
+
+
+
+```
+
+\newpage
+
+## Researcher types
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#researcher
+df <- t(t(colSums(crcdata[,12:17])))
+df <- df[order(df[,1], decreasing = TRUE),]
+par(mar = c(6,4,4,4))
+#barplot(df, las=2, main = "Researcher Types")
+
+df <- data.frame(df)
+rownames(df) <- c("Engineering", "Physics", "Imterdisciplinary", "Computer Science", "Math", "NGO")
+df$group <- row.names(df)
+df$group <- factor(df$group, levels=c("Engineering", "Physics", "Imterdisciplinary", "Computer Science", "Math", "NGO"))
+
+ggplot(df, aes(x=group, y=df)) +
+    geom_bar(stat='identity', fill="#99CC99")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + guides(col=guide_legend("Researcher Types")) +labs(y= "Count", x = "Researcher Type")
+
+
+```
+\newpage
+
+## Stakeholder types
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#stakeholder types
+df <- t(t(colSums(crcdata[,23:32])))
+df <- df[order(df[,1], decreasing = TRUE),]
+par(mar = c(11,4,4,4))
+#barplot(df, las=2, main = "Stakeholder Types")
+
+
+df <- data.frame(df)
+rownames(df) <- c("Combined Government", "Combined Industry", "Farmers", "University", "Combined Coalition", "Public", "Experts", "Tribal Nations", "Youth", "Migrants")
+df$group <- row.names(df)
+df$group <- factor(df$group, levels=c("Combined Government", "Combined Industry", "Farmers", "University", "Combined Coalition", "Public", "Experts", "Tribal Nations", "Youth", "Migrants"))
+
+ggplot(df, aes(x=group, y=df)) +
+    geom_bar(stat='identity', fill="#99CC99")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + guides(col=guide_legend("Stakeholder Types")) +labs(y= "Count", x = "Stakeholder Type")
+
+```
+\newpage
+
+## Ghodsvali scale breakdown
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#ghodsvali scale
+df <- t(t(colSums(crcdata[,33:36])))
+df <- df[order(df[,1]),]
+par(mar = c(11,4,4,4))
+
+#barplot(c(df[3], df[4], df[2], df[1]), las=2, main="Ghodsvali Scale Breakdown")
+
+df <- data.frame(df)
+rownames(df) <- c("Transformative", "Representation", "Nominal", "Instrumental")
+df$group <- row.names(df)
+library(dplyr)
+
+# create a vector with letters in the desired order
+x <- c("Nominal", "Instrumental",        "Representation",   "Transformative" )
+
+df <- df %>%
+  slice(match(x, group))
+
+
+
+#rownames(df) <- c("Transformative", "Representation", "Nominal", "Instrumental")
+#df$group <- row.names(df)
+#df <- c(df[3,], df[4,], df[2,], df[1,])
+df$group <- factor(df$group, levels=c("Nominal", "Instrumental", "Representation", "Transformative"))
+
+ggplot(df, aes(x=group, y=df)) +
+    geom_bar(stat='identity', fill="#99CC99")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + guides(col=guide_legend("Ghodsvali Scale Breakdown")) +labs(y= "Count", x = "Ghodsvali Scale")
+
+```
+\newpage
+
+## Geographic location breakdown
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geography
+df <- t(t(colSums(crcdata[,38:42])))
+df <- df[order(df[,1], decreasing = TRUE),]
+par(mar = c(8,4,4,4))
+#barplot(df, las=2, main="Geographic Location Breakdown")
+
+
+
+
+df <- data.frame(df)
+rownames(df) <- c("Local", "Regional", "National", "Multinational", "Global")
+df$group <- row.names(df)
+library(dplyr)
+
+# create a vector with letters in the desired order
+#x <- c("Researcher", "Data Gathering",        "Inform",   "Envision", "Collaborative", "Empowered" )
+
+#df <- df %>%
+#  slice(match(x, group))
+
+
+
+#rownames(df) <- c("Transformative", "Representation", "Nominal", "Instrumental")
+#df$group <- row.names(df)
+#df <- c(df[3,], df[4,], df[2,], df[1,])
+df$group <- factor(df$group, levels=c("Local", "Regional", "National", "Multinational", "Global"))
+
+ggplot(df, aes(x=group, y=df)) +
+    geom_bar(stat='identity', fill="#99CC99")+theme_bw()+theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + guides(col=guide_legend("Geography")) +labs(y= "Count", x = "Geography")
+
+```
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Odds of stakeholder scale predicting whether a solution was proposed or not
+
+#set.seed(101) 
+#sample = sample.split(crcdata, SplitRatio = .75)
+#train = subset(crcdata, sample == TRUE)
+#test  = subset(crcdata, sample == FALSE)
+
+
+ghodsvali.fit<-glm(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,binomial(link = "logit"), data = crcdata)
+# IAP2.fit<-glm(solution_proposed_YN ~STE_IAP2_data_gathering+STE_IAP2_inform+STE_IAP2_consult+STE_IAP2_involve+STE_IAP2_collab+STE_IAP2_empower,binomial(link = "logit"), data = crcdata)
+# local.fit<-glm(solution_proposed_YN ~SC_researcher+SC_datagathering+SC_inform+SC_perspectives+SC_plan+SC_identify+SC_envision+SC_implement,binomial(link = "logit"), data = crcdata)
+
+```
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+#--sequentially compares the smaller model with the next more 
+#--complex model by adding one variable in each step. Each of those 
+#--comparisons is done via a likelihood ratio test 
+
+#anova_ghodsvali_logit <- anova(ghodsvali.fit, test="Chisq")
+#anova_IAP2_logit <- anova(IAP2.fit, test="Chisq")
+#anova_local_logit <- anova(local.fit, test="Chisq")
+
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#prediction_accuracy <- predict(ghodsvali.fit, test, type="response", interval="confidence")
+```
+
+\newpage
+# Ghodsvali Scale Modeling - solution proposed
+
+## Ghodsvali scale regression
+
+Ghodsvali scale regression testing on whether a solution was proposed or not
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+summary(ghodsvali.fit)
+
+```
+\newpage
+
+## Ghodsvali scale odds
+
+Odds of Ghodsvali scale predicting whether a solution was proposed or not
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+ghodsvali.fit<-glm(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,binomial(link = "logit"), data = crcdata)
+logistic.display(ghodsvali.fit)
+
+
+```
+
+\newpage
+
+## Ghodsvali Ensembled Decision Tree with Feature Importance 
+
+Ghodsvali ensembled decision tree with solution proposed being the dependent variable
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+#library(randomForest)
+library(caret)
+library(pROC)
+#library(ROCR)
+library(ranger)
+library(ggplot2)
+
+set.seed(2223)
+
+crcdata$solution_proposed_YN <- factor(crcdata$solution_proposed_YN, levels = c("N", "Y"))
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+rf_weighted <- train(
+  solution_proposed_YN ~ STE_G_nominal + STE_G_instrumental + 
+                         STE_G_representation + STE_G_transformative,
+  data = crcdata,
+  method = "ranger",
+  trControl = ctrl, 
+  tuneGrid = expand.grid(
+    mtry = 2,
+    splitrule = "gini",
+    min.node.size = c(20,30,40)
+  ),
+  num.trees = 1000,
+  importance = "impurity",
+  metric = "ROC"
+)
+
+#model results for printout:
+
+# ---- compact summary (one paragraph) ----
+best <- rf_weighted$bestTune
+res  <- rf_weighted$results
+for (nm in names(best)) res <- res[res[[nm]] == best[[nm]], ]
+
+auc_mean <- res$ROC[1]; auc_sd <- res$ROCSD[1]
+trees <- rf_weighted$finalModel$num.trees
+n <- nrow(rf_weighted$trainingData)
+cls <- table(rf_weighted$trainingData$.outcome)
+
+vi <- caret::varImp(rf_weighted, scale = TRUE)$importance
+vi$Feature <- rownames(vi)
+top3 <- paste(head(vi[order(-vi$Overall), "Feature"], 3), collapse = ", ")
+
+cat(sprintf("**Random forest (ranger).** %d trees; mtry=%d; min.node.size=%d; 5-fold CV.\n\n",
+            trees, best$mtry, best$min.node.size))
+cat(sprintf("**CV AUC:** %.3f (SD=%.3f).  **n:** %d.  **Class counts:** %s.\n\n",
+            auc_mean, auc_sd, n,
+            paste(sprintf("%s=%d", names(cls), as.integer(cls)), collapse=", ")))
+cat(sprintf("**Top features:** %s.\n", top3))
+
+
+
+
+
+
+## 1) In-sample AUC (on the training data)
+rf_probs <- predict(rf_weighted, newdata = crcdata, type = "prob")[, "Y"]
+roc_train <- pROC::roc(crcdata$solution_proposed_YN, rf_probs, levels = c("N","Y"))
+#auc(roc_train)
+
+## 2) Cross-validated AUC from caret's saved out-of-fold predictions
+## (works if you trained with savePredictions="final" in trainControl)
+
+stopifnot(!is.null(rf_weighted$pred))  # will error if you didn't save predictions
+
+cv_preds <- rf_weighted$pred
+
+## keep only rows for the selected hyperparameters
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv_preds <- cv_preds[cv_preds[[nm]] == bt[[nm]], ]
+
+roc_cv <- pROC::roc(cv_preds$obs, cv_preds$Y, levels = c("N","Y"))  # 'Y' column = P(class "Y")
+#auc(roc_cv)
+
+
+# Best hyperparameters chosen by caret
+#rf_weighted$bestTune
+#rf_weighted$results[order(-rf_weighted$results$ROC), ][, c("mtry","min.node.size","ROC","ROCSD")]
+
+# Out-of-fold predictions for the best hyperparameters only
+cv <- rf_weighted$pred
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv <- cv[cv[[nm]] == bt[[nm]], ]
+
+# CV AUC (preferred estimate)
+roc_cv <- pROC::roc(cv$obs, cv$Y, levels = c("N","Y"))
+#auc(roc_cv)
+
+#plot(roc_cv, print.auc = TRUE, main = "Cross-Validated ROC (caret, best tune)")
+
+# Assume roc_cv and roc_train already exist
+auc_train <- round(pROC::auc(roc_train), 3)
+auc_cv <- round(pROC::auc(roc_cv), 3)
+
+plot(roc_cv, col = "red", lwd = 2, lty = 2,
+     main = "Training vs CV ROC Curves")
+lines(roc_train, col = "blue", lwd = 2)
+grid()
+
+legend("bottomright",
+       legend = c(
+         paste("CV (out-of-fold) AUC =", auc_cv),
+         paste("Training AUC =", auc_train)
+       ),
+       col = c("red", "blue"),
+       lty = c(2, 1),
+       lwd = 2,
+       bty = "n")
+
+
+# 1) Get permutation importance from the fitted caret model
+vi <- varImp(rf_weighted, scale = FALSE)     # scale=TRUE rescales to [0,100]
+imp <- vi$importance
+imp$Feature <- rownames(imp)
+
+# 2) Keep the best-tuned model's importance and sort
+# (For binary classification, caret provides an "Overall" column)
+imp <- imp[order(-imp$Overall), ]
+top_n <- head(imp, 10)
+
+# 3) Pretty plot
+ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
+  geom_col(width = 0.7, fill = "blue") +
+  coord_flip() +
+  labs(
+    title = "Feature Importance",
+    x = "Feature",
+    y = "Feature Importance"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.margin = ggplot2::margin(5.5,12,5.5,5.5),
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(margin = margin(r = 8)),
+    axis.title.x = element_text(margin = margin(t = 8))
+  )
+
+```
+
+\newpage
+
+# Stakeholder Engagement Modeling - solution proposed
+
+## QUESTION: Does engaging stakeholders increase the likelihood that a solution will be proposed/implemented?
+
+Here we use classical logistic regression using a binomial function to determine if engaging stakeholders (Y/N) increases the odds that a solution will be proposed.
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#engagement of stakeholders vs. solutions
+
+stakeholder_vs_solutions <-glm(solution_proposed_YN ~S_stakeholder_engagement_YN,family=binomial,data=crcdata)
+
+summary(stakeholder_vs_solutions)
+#logistic.display(stakeholder_vs_solutions)
+
+```
+
+
+\newpage
+
+## ODDS RATIOS: Does engaging stakeholders increase the likelihood that a solution will be proposed/implemented?
+
+Odds of whether engaging stakeholders increases the likelihood that a solution will be proposed?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#engagement of stakeholders vs. solutions
+
+stakeholder_vs_solutions <-glm(solution_proposed_YN ~S_stakeholder_engagement_YN,family=binomial,data=crcdata)
+
+#summary(stakeholder_vs_solutions)
+logistic.display(stakeholder_vs_solutions)
+
+```
+
+\newpage
+
+## Diversity of stakeholders vs solution
+
+## QUESTION: Does the diversity of stakeholders increase the likelihood that a solution will be proposed?
+
+Regression testing of whether Diversity of stakeholders predicts if a solution was proposed (Y/N).  In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+crcdata$ST_ratio <- rowSums(crcdata[,23:31])/9
+
+stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
+
+summary(stratio_vs_solutions)
+#logistic.display(stratio_vs_solutions)
+
+```
+
+\newpage
+
+## ODDS RATIOS: Does the diversity of stakeholders increase the likelihood that a solution will be proposed?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+logistic.display(stratio_vs_solutions)
+
+```
+
+## QUESTION: If diversity of stakeholders does not increase proposing/implementing solutions, which stakeholders are more associated with proposing/implementing solutions?
+
+Regression testing for diversity of stakeholders used to predict whether a solution was proposed
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_public + ST_university + ST_experts,family=binomial,data=crcdata)
+
+summary(stratio_vs_solutions)
+
+#logistic.display(stratio_vs_solutions)
+
+```
+
+
+## ODDS RATIOS: Diversity of stakeholders vs solution
+
+Odds whether Diversity of stakeholders predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of stakeholders vs solutions (using ratio)
+
+stratio_vs_solutions <-glm(solution_proposed_YN ~ ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry  + ST_public + ST_university + ST_experts,family=binomial,data=crcdata)
+
+#summary(stratio_vs_solutions)
+logistic.display(stratio_vs_solutions)
+
+```
+
+## DECISION TREE: Ensembed Decision Tree - Diversity of stakeholders vs solution -->
+
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+#library(randomForest)
+library(caret)
+library(pROC)
+#library(ROCR)
+library(ranger)
+library(ggplot2)
+
+set.seed(2223)
+
+crcdata$solution_proposed_YN <- factor(crcdata$solution_proposed_YN, levels = c("N", "Y"))
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+rf_weighted <- train(
+  solution_proposed_YN ~ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_public + ST_university + ST_experts,
+  data = crcdata,
+  method = "ranger",
+  trControl = ctrl, 
+  tuneGrid = expand.grid(
+    mtry = 2,
+    splitrule = "gini",
+    min.node.size = c(20,30,40)
+  ),
+  num.trees = 1000,
+  importance = "impurity",
+  metric = "ROC"
+)
+
+#model results for printout:
+
+# ---- compact summary (one paragraph) ----
+best <- rf_weighted$bestTune
+res  <- rf_weighted$results
+for (nm in names(best)) res <- res[res[[nm]] == best[[nm]], ]
+
+auc_mean <- res$ROC[1]; auc_sd <- res$ROCSD[1]
+trees <- rf_weighted$finalModel$num.trees
+n <- nrow(rf_weighted$trainingData)
+cls <- table(rf_weighted$trainingData$.outcome)
+
+vi <- caret::varImp(rf_weighted, scale = TRUE)$importance
+vi$Feature <- rownames(vi)
+top3 <- paste(head(vi[order(-vi$Overall), "Feature"], 3), collapse = ", ")
+
+cat(sprintf("**Random forest (ranger).** %d trees; mtry=%d; min.node.size=%d; 5-fold CV.\n\n",
+            trees, best$mtry, best$min.node.size))
+cat(sprintf("**CV AUC:** %.3f (SD=%.3f).  **n:** %d.  **Class counts:** %s.\n\n",
+            auc_mean, auc_sd, n,
+            paste(sprintf("%s=%d", names(cls), as.integer(cls)), collapse=", ")))
+cat(sprintf("**Top features:** %s.\n", top3))
+
+
+
+
+
+
+## 1) In-sample AUC (on the training data)
+rf_probs <- predict(rf_weighted, newdata = crcdata, type = "prob")[, "Y"]
+roc_train <- pROC::roc(crcdata$solution_proposed_YN, rf_probs, levels = c("N","Y"))
+#auc(roc_train)
+
+## 2) Cross-validated AUC from caret's saved out-of-fold predictions
+## (works if you trained with savePredictions="final" in trainControl)
+
+stopifnot(!is.null(rf_weighted$pred))  # will error if you didn't save predictions
+
+cv_preds <- rf_weighted$pred
+
+## keep only rows for the selected hyperparameters
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv_preds <- cv_preds[cv_preds[[nm]] == bt[[nm]], ]
+
+roc_cv <- pROC::roc(cv_preds$obs, cv_preds$Y, levels = c("N","Y"))  # 'Y' column = P(class "Y")
+#auc(roc_cv)
+
+
+# Best hyperparameters chosen by caret
+#rf_weighted$bestTune
+#rf_weighted$results[order(-rf_weighted$results$ROC), ][, c("mtry","min.node.size","ROC","ROCSD")]
+
+# Out-of-fold predictions for the best hyperparameters only
+cv <- rf_weighted$pred
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv <- cv[cv[[nm]] == bt[[nm]], ]
+
+# CV AUC (preferred estimate)
+roc_cv <- pROC::roc(cv$obs, cv$Y, levels = c("N","Y"))
+#auc(roc_cv)
+
+#plot(roc_cv, print.auc = TRUE, main = "Cross-Validated ROC (caret, best tune)")
+
+# Assume roc_cv and roc_train already exist
+auc_train <- round(pROC::auc(roc_train), 3)
+auc_cv <- round(pROC::auc(roc_cv), 3)
+
+plot(roc_cv, col = "red", lwd = 2, lty = 2,
+     main = "Training vs CV ROC Curves")
+lines(roc_train, col = "blue", lwd = 2)
+grid()
+
+legend("bottomright",
+       legend = c(
+         paste("CV (out-of-fold) AUC =", auc_cv),
+         paste("Training AUC =", auc_train)
+       ),
+       col = c("red", "blue"),
+       lty = c(2, 1),
+       lwd = 2,
+       bty = "n")
+
+
+# 1) Get permutation importance from the fitted caret model
+vi <- varImp(rf_weighted, scale = FALSE)     # scale=TRUE rescales to [0,100]
+imp <- vi$importance
+imp$Feature <- rownames(imp)
+
+# 2) Keep the best-tuned model's importance and sort
+# (For binary classification, caret provides an "Overall" column)
+imp <- imp[order(-imp$Overall), ]
+top_n <- head(imp, 10)
+
+# 3) Pretty plot
+ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
+  geom_col(width = 0.7, fill = "blue") +
+  coord_flip() +
+  labs(
+    title = "Feature Importance",
+    x = "Feature",
+    y = "Feature Importance"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.margin = ggplot2::margin(5.5,12,5.5,5.5),
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(margin = margin(r = 8)),
+    axis.title.x = element_text(margin = margin(t = 8))
+  )
+
+
+
+
+
+
+#-----end new
+
+
+
+# library(randomForest)
+# library(caret)
+# set.seed(2223)
+# ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+# train <- crcdata[ind==1,]
+# test <- crcdata[ind==2,]
+# rf <- randomForest(solution_proposed_YN ~ST_farmers + ST_combined_gov  + ST_combined_coalition + ST_combined_industry + ST_migrants + ST_public + ST_university + ST_experts, data=train, proximity=TRUE, importance=TRUE)
+# print(rf)
+# 
+# p2 <- predict(rf, test)
+# confusionMatrix(p2, test$solution_proposed_YN)
+# 
+# hist(treesize(rf),
+#      main = "No. of Nodes for the Trees",
+#      col = "green")
+# varImpPlot(rf,
+#            main = "Top 10 - Variable Importance")
+# importance(rf)
+# 
+# #--
+# 
+# # Required libraries
+# library(randomForest)
+# library(ggplot2)
+# 
+# 
+# # Extract variable importance
+# var_imp <- importance(rf, type = 2)  # type = 2 is MeanDecreaseGini
+# var_imp_df <- data.frame(Variable = rownames(var_imp),
+#                          MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+# 
+# # Sort and select top 10
+# var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+# top_vars <- head(var_imp_df, 10)
+# 
+# # Plot
+# ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+#   geom_bar(stat = "identity", fill = "steelblue") +
+#   coord_flip() +
+#   labs(title = "Top 10 Variable Importance - Random Forest Model",
+#        x = "Variable", y = "Mean Decrease in Gini") +
+#   theme_minimal()
+
+
+
+```
+
+
+\newpage
+
+# Researcher Modeling - solution proposed
+
+## QUESTION: Does researcher type increase the likelihood that a solution will be proposed?
+
+Regression of whether researcher type predicts if a solution was proposed (Y/N). 
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#researchers type vs solutions
+
+researchertype_vs_solutions <-glm(solution_proposed_YN ~ R_ngo +  R_eng + R_math + R_compsci +R_phys + R_interdis + R_socsci + R_economics + R_ag + R_other,family=binomial,data=crcdata)
+
+summary(researchertype_vs_solutions)
+#logistic.display(rratio_vs_solutions)
+
+```
+\newpage
+
+## ODDS RATIOS: Does researcher type increase the likelihood that a solution will be proposed?
+
+Odds of whether researcher type predicts if a solution was proposed (Y/N). A ratio which is closer to 1 has a greater level of researcher diversity.
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#researchers type vs solutions (using ratio)
+
+researchertype_vs_solutions <-glm(solution_proposed_YN ~ R_ngo +  R_eng + R_math + R_compsci +R_phys + R_interdis + R_socsci + R_economics + R_ag + R_other,family=binomial,data=crcdata)
+
+logistic.display(researchertype_vs_solutions)
+
+```
+
+\newpage
+
+## DECISON TREE: Researcher Type Ensembed Decision Tree - researcher type vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+
+#library(randomForest)
+library(caret)
+library(pROC)
+#library(ROCR)
+library(ranger)
+library(ggplot2)
+
+set.seed(2223)
+
+crcdata$solution_proposed_YN <- factor(crcdata$solution_proposed_YN, levels = c("N", "Y"))
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+rf_weighted <- train(
+  solution_proposed_YN ~R_ngo +  R_eng + R_math + R_compsci +R_phys + R_interdis + R_socsci + R_economics + R_ag + R_other,
+  data = crcdata,
+  method = "ranger",
+  trControl = ctrl, 
+  tuneGrid = expand.grid(
+    mtry = 2,
+    splitrule = "gini",
+    min.node.size = c(20,30,40)
+  ),
+  num.trees = 1000,
+  importance = "impurity",
+  metric = "ROC"
+)
+
+#model results for printout:
+
+# ---- compact summary (one paragraph) ----
+best <- rf_weighted$bestTune
+res  <- rf_weighted$results
+for (nm in names(best)) res <- res[res[[nm]] == best[[nm]], ]
+
+auc_mean <- res$ROC[1]; auc_sd <- res$ROCSD[1]
+trees <- rf_weighted$finalModel$num.trees
+n <- nrow(rf_weighted$trainingData)
+cls <- table(rf_weighted$trainingData$.outcome)
+
+vi <- caret::varImp(rf_weighted, scale = TRUE)$importance
+vi$Feature <- rownames(vi)
+top3 <- paste(head(vi[order(-vi$Overall), "Feature"], 3), collapse = ", ")
+
+cat(sprintf("**Random forest (ranger).** %d trees; mtry=%d; min.node.size=%d; 5-fold CV.\n\n",
+            trees, best$mtry, best$min.node.size))
+cat(sprintf("**CV AUC:** %.3f (SD=%.3f).  **n:** %d.  **Class counts:** %s.\n\n",
+            auc_mean, auc_sd, n,
+            paste(sprintf("%s=%d", names(cls), as.integer(cls)), collapse=", ")))
+cat(sprintf("**Top features:** %s.\n", top3))
+
+
+
+
+
+
+## 1) In-sample AUC (on the training data)
+rf_probs <- predict(rf_weighted, newdata = crcdata, type = "prob")[, "Y"]
+roc_train <- pROC::roc(crcdata$solution_proposed_YN, rf_probs, levels = c("N","Y"))
+#auc(roc_train)
+
+## 2) Cross-validated AUC from caret's saved out-of-fold predictions
+## (works if you trained with savePredictions="final" in trainControl)
+
+stopifnot(!is.null(rf_weighted$pred))  # will error if you didn't save predictions
+
+cv_preds <- rf_weighted$pred
+
+## keep only rows for the selected hyperparameters
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv_preds <- cv_preds[cv_preds[[nm]] == bt[[nm]], ]
+
+roc_cv <- pROC::roc(cv_preds$obs, cv_preds$Y, levels = c("N","Y"))  # 'Y' column = P(class "Y")
+#auc(roc_cv)
+
+
+# Best hyperparameters chosen by caret
+#rf_weighted$bestTune
+#rf_weighted$results[order(-rf_weighted$results$ROC), ][, c("mtry","min.node.size","ROC","ROCSD")]
+
+# Out-of-fold predictions for the best hyperparameters only
+cv <- rf_weighted$pred
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv <- cv[cv[[nm]] == bt[[nm]], ]
+
+# CV AUC (preferred estimate)
+roc_cv <- pROC::roc(cv$obs, cv$Y, levels = c("N","Y"))
+#auc(roc_cv)
+
+#plot(roc_cv, print.auc = TRUE, main = "Cross-Validated ROC (caret, best tune)")
+
+# Assume roc_cv and roc_train already exist
+auc_train <- round(pROC::auc(roc_train), 3)
+auc_cv <- round(pROC::auc(roc_cv), 3)
+
+plot(roc_cv, col = "red", lwd = 2, lty = 2,
+     main = "Training vs CV ROC Curves")
+lines(roc_train, col = "blue", lwd = 2)
+grid()
+
+legend("bottomright",
+       legend = c(
+         paste("CV (out-of-fold) AUC =", auc_cv),
+         paste("Training AUC =", auc_train)
+       ),
+       col = c("red", "blue"),
+       lty = c(2, 1),
+       lwd = 2,
+       bty = "n")
+
+
+# 1) Get permutation importance from the fitted caret model
+vi <- varImp(rf_weighted, scale = FALSE)     # scale=TRUE rescales to [0,100]
+imp <- vi$importance
+imp$Feature <- rownames(imp)
+
+# 2) Keep the best-tuned model's importance and sort
+# (For binary classification, caret provides an "Overall" column)
+imp <- imp[order(-imp$Overall), ]
+top_n <- head(imp, 10)
+
+# 3) Pretty plot
+ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
+  geom_col(width = 0.7, fill = "blue") +
+  coord_flip() +
+  labs(
+    title = "Feature Importance",
+    x = "Feature",
+    y = "Feature Importance"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.margin = ggplot2::margin(5.5,12,5.5,5.5),
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(margin = margin(r = 8)),
+    axis.title.x = element_text(margin = margin(t = 8))
+  )
+
+
+
+
+
+
+#-----end new
+
+# library(randomForest)
+# library(caret)
+# set.seed(2223)
+# ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+# train <- crcdata[ind==1,]
+# test <- crcdata[ind==2,]
+# rf <- randomForest(solution_proposed_YN ~R_ngo +  R_eng + R_math + R_compsci +R_phys + R_interdis + R_socsci + R_economics + R_ag + R_other, data=train, proximity=TRUE, importance=TRUE) 
+# print(rf)
+# 
+# p2 <- predict(rf, test)
+# confusionMatrix(p2, test$solution_proposed_YN)
+# 
+# hist(treesize(rf),
+#      main = "No. of Nodes for the Trees",
+#      col = "green")
+# varImpPlot(rf,
+#            main = "Top 10 - Variable Importance")
+# randomForest::importance(rf)
+# 
+# #----new model on data where there is no solution proposed
+# 
+# crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+# crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+# crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagement_YN == "Y")
+# crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagement_YN == "N")
+# sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+# 
+# solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+# 
+# rf2 <- randomForest(solution_proposed_YN ~R_ngo +  R_eng + R_math + R_compsci +R_phys + R_interdis + R_socsci + R_economics + R_ag + R_other, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+# 
+# # rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+# 
+# p2_nosolution <- predict(rf2, crcdata_nosolution)
+# #confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+# 
+# 
+# hist(treesize(rf2),
+#      main = "Balanced Model - No. of Nodes for the Trees",
+#      col = "green")
+# varImpPlot(rf2,
+#            main = "Balanced Model - Top 10 - Variable Importance")
+# importance(rf2)
+# 
+# #--
+# 
+# # Required libraries
+# library(randomForest)
+# library(ggplot2)
+# 
+# 
+# # Extract variable importance
+# var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+# var_imp_df <- data.frame(Variable = rownames(var_imp),
+#                          MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+# 
+# # Sort and select top 10
+# var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+# top_vars <- head(var_imp_df, 10)
+# 
+# # Plot
+# ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+#   geom_bar(stat = "identity", fill = "steelblue") +
+#   coord_flip() +
+#   labs(title = "Top 10 Variable Importance - Random Forest Model",
+#        x = "Variable", y = "Mean Decrease in Gini") +
+#   theme_minimal()
+
+
+```
+
+
+
+
+\newpage
+
+# Researcher Diversity Modeling - solution proposed
+
+## QUESTION: Does the diversity of researchers increases the likelihood that a solution will be proposed?
+
+Regression of whether Diversity of researchers predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of researcher types involved, divided by the total number of possible researcher options.  A ratio which is closer to 1 has a greater level of researcher diversity.
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of researchers vs solutions (using ratio)
+
+
+crcdata$ST_ratio <- rowSums(crcdata[,12:21])/10
+
+rratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
+
+summary(rratio_vs_solutions)
+#logistic.display(rratio_vs_solutions)
+
+```
+
+
+\newpage
+
+## ODDS RATIOS: Does the diversity of researchers increases the likelihood that a solution will be proposed?
+
+Odds of whether Diversity of researchers predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of researcher types involved, divided by the total number of possible researcher options.  A ratio which is closer to 1 has a greater level of researcher diversity.
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#Diversity of researchers vs solutions (using ratio)
+
+
+crcdata$ST_ratio <- rowSums(crcdata[,12:21])/10
+
+rratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
+
+#summary(rratio_vs_solutions)
+logistic.display(rratio_vs_solutions)
+
+```
+
+
+\newpage
+
+# Stakeholder Engagement Modeling - Ghodsvali
+
+## Regression Testing - Stakeholder type vs level of engagement (Ghodsvali)
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#stakeholder type vs level of engagement ghodsvali
+
+ST_engagement<-lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative,data=crcdata)
+
+summary(ST_engagement)
+
+
+```
+
+\newpage
+
+## Regression Testing - Stakeholder type vs solution 
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#stakeholder type vs solution
+
+ST_solution <- glm(solution_proposed_YN~ST_farmers+ST_combined_gov+ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts, family=binomial, data=crcdata)
+
+summary(ST_solution)
+
+```
+
+\newpage
+
+# Geographic Location Modeling - solution proposed
+
+## QUESTION: Does the geographic location of the study increase the likelihood of proposed/implemented solutions?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+geog_solution <- glm(solution_proposed_YN~G_local+G_regional+G_national+G_multinational+G_global, family=binomial, data=crcdata)
+summary(geog_solution)
+#logistic.display(geog_solution)
+
+
+```
+
+\newpage
+
+## ODDS RATIOS: Does the geographic location of the study increase the likelihood of proposed/implemented solutions?
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+logistic.display(geog_solution)
+
+
+```
+
+\newpage
+
+## DECISON TREE: Geographic area Ensembed Decision Tree - Geographic area vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+#library(randomForest)
+library(caret)
+library(pROC)
+#library(ROCR)
+library(ranger)
+library(ggplot2)
+
+set.seed(2223)
+
+crcdata$solution_proposed_YN <- factor(crcdata$solution_proposed_YN, levels = c("N", "Y"))
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+rf_weighted <- train(
+  solution_proposed_YN ~G_local+G_regional+G_national+G_multinational+G_global,
+  data = crcdata,
+  method = "ranger",
+  trControl = ctrl, 
+  tuneGrid = expand.grid(
+    mtry = 2,
+    splitrule = "gini",
+    min.node.size = c(20,30,40)
+  ),
+  num.trees = 1000,
+  importance = "impurity",
+  metric = "ROC"
+)
+
+#model results for printout:
+
+# ---- compact summary (one paragraph) ----
+best <- rf_weighted$bestTune
+res  <- rf_weighted$results
+for (nm in names(best)) res <- res[res[[nm]] == best[[nm]], ]
+
+auc_mean <- res$ROC[1]; auc_sd <- res$ROCSD[1]
+trees <- rf_weighted$finalModel$num.trees
+n <- nrow(rf_weighted$trainingData)
+cls <- table(rf_weighted$trainingData$.outcome)
+
+vi <- caret::varImp(rf_weighted, scale = TRUE)$importance
+vi$Feature <- rownames(vi)
+top3 <- paste(head(vi[order(-vi$Overall), "Feature"], 3), collapse = ", ")
+
+cat(sprintf("**Random forest (ranger).** %d trees; mtry=%d; min.node.size=%d; 5-fold CV.\n\n",
+            trees, best$mtry, best$min.node.size))
+cat(sprintf("**CV AUC:** %.3f (SD=%.3f).  **n:** %d.  **Class counts:** %s.\n\n",
+            auc_mean, auc_sd, n,
+            paste(sprintf("%s=%d", names(cls), as.integer(cls)), collapse=", ")))
+cat(sprintf("**Top features:** %s.\n", top3))
+
+
+
+
+
+
+## 1) In-sample AUC (on the training data)
+rf_probs <- predict(rf_weighted, newdata = crcdata, type = "prob")[, "Y"]
+roc_train <- pROC::roc(crcdata$solution_proposed_YN, rf_probs, levels = c("N","Y"))
+#auc(roc_train)
+
+## 2) Cross-validated AUC from caret's saved out-of-fold predictions
+## (works if you trained with savePredictions="final" in trainControl)
+
+stopifnot(!is.null(rf_weighted$pred))  # will error if you didn't save predictions
+
+cv_preds <- rf_weighted$pred
+
+## keep only rows for the selected hyperparameters
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv_preds <- cv_preds[cv_preds[[nm]] == bt[[nm]], ]
+
+roc_cv <- pROC::roc(cv_preds$obs, cv_preds$Y, levels = c("N","Y"))  # 'Y' column = P(class "Y")
+#auc(roc_cv)
+
+
+# Best hyperparameters chosen by caret
+#rf_weighted$bestTune
+#rf_weighted$results[order(-rf_weighted$results$ROC), ][, c("mtry","min.node.size","ROC","ROCSD")]
+
+# Out-of-fold predictions for the best hyperparameters only
+cv <- rf_weighted$pred
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv <- cv[cv[[nm]] == bt[[nm]], ]
+
+# CV AUC (preferred estimate)
+roc_cv <- pROC::roc(cv$obs, cv$Y, levels = c("N","Y"))
+#auc(roc_cv)
+
+#plot(roc_cv, print.auc = TRUE, main = "Cross-Validated ROC (caret, best tune)")
+
+# Assume roc_cv and roc_train already exist
+auc_train <- round(pROC::auc(roc_train), 3)
+auc_cv <- round(pROC::auc(roc_cv), 3)
+
+plot(roc_cv, col = "red", lwd = 2, lty = 2,
+     main = "Training vs CV ROC Curves")
+lines(roc_train, col = "blue", lwd = 2)
+grid()
+
+legend("bottomright",
+       legend = c(
+         paste("CV (out-of-fold) AUC =", auc_cv),
+         paste("Training AUC =", auc_train)
+       ),
+       col = c("red", "blue"),
+       lty = c(2, 1),
+       lwd = 2,
+       bty = "n")
+
+
+# 1) Get permutation importance from the fitted caret model
+vi <- varImp(rf_weighted, scale = FALSE)     # scale=TRUE rescales to [0,100]
+imp <- vi$importance
+imp$Feature <- rownames(imp)
+
+# 2) Keep the best-tuned model's importance and sort
+# (For binary classification, caret provides an "Overall" column)
+imp <- imp[order(-imp$Overall), ]
+top_n <- head(imp, 10)
+
+# 3) Pretty plot
+ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
+  geom_col(width = 0.7, fill = "blue") +
+  coord_flip() +
+  labs(
+    title = "Feature Importance",
+    x = "Feature",
+    y = "Feature Importance"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.margin = ggplot2::margin(5.5,12,5.5,5.5),
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(margin = margin(r = 8)),
+    axis.title.x = element_text(margin = margin(t = 8))
+  )
+
+
+
+
+
+
+#-----end new
+
+# library(randomForest)
+# library(caret)
+# set.seed(2223)
+# ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+# train <- crcdata[ind==1,]
+# test <- crcdata[ind==2,]
+# 
+# 
+# rf <- randomForest(solution_proposed_YN ~G_local+G_regional+G_national+G_multinational+G_global, data=train, proximity=TRUE, importance=TRUE) 
+# print(rf)
+# 
+# p2 <- predict(rf, test)
+# confusionMatrix(p2, test$solution_proposed_YN)
+# 
+# hist(treesize(rf),
+#      main = "No. of Nodes for the Trees",
+#      col = "green")
+# varImpPlot(rf,
+#            main = "Top 10 - Variable Importance")
+# importance(rf)
+# 
+# #----new model on data where there is no solution proposed
+# 
+# crcdata_solution <- subset(crcdata, solution_proposed_YN == "Y")
+# crcdata_nosolution <- subset(crcdata, solution_proposed_YN == "N")
+# crcdata_stakeholders <- subset(crcdata, S_stakeholder_engagement_YN == "Y")
+# crcdata_nostakeholders <- subset(crcdata, S_stakeholder_engagement_YN == "N")
+# sample_crcdata_nosolution <- sample_n(crcdata_nosolution, 30)
+# 
+# solution_proposed_YN_combo <- rbind(crcdata_solution, sample_crcdata_nosolution)
+# 
+# rf2 <- randomForest(solution_proposed_YN ~G_local+G_regional+G_national+G_multinational+G_global, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+# 
+# # rf3 <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=solution_proposed_YN_combo, proximity=TRUE, importance=TRUE) 
+# 
+# p2_nosolution <- predict(rf2, crcdata_nosolution)
+# #confusionMatrix(p2_nosolution, test$solution_proposed_YN)
+# 
+# 
+# hist(treesize(rf2),
+#      main = "Balanced Model - No. of Nodes for the Trees",
+#      col = "green")
+# varImpPlot(rf2,
+#            main = "Balanced Model - Top 10 - Variable Importance")
+# importance(rf2)
+# 
+# #--
+# 
+# # Required libraries
+# library(randomForest)
+# library(ggplot2)
+# 
+# 
+# # Extract variable importance
+# var_imp <- importance(rf2, type = 2)  # type = 2 is MeanDecreaseGini
+# var_imp_df <- data.frame(Variable = rownames(var_imp),
+#                          MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+# 
+# # Sort and select top 10
+# var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+# top_vars <- head(var_imp_df, 10)
+# 
+# # Plot
+# ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+#   geom_bar(stat = "identity", fill = "steelblue") +
+#   coord_flip() +
+#   labs(title = "Top 10 Variable Importance - Random Forest Model",
+#        x = "Variable", y = "Mean Decrease in Gini") +
+#   theme_minimal()
+
+
+```
+
+
+\newpage
+
+# Regional Location Modeling - solution proposed
+
+## QUESTION: Does the regional location of the study increase the likelihood of proposed/implemented solutions? Regions were grouped in: Europe/Asia, Middle East/Global - and Other.
+
+## RESULTS: A bias-reduced logistic regression indicated that region was significantly associated with whether a solution was proposed, Chisquare = 7.28, p = .026. 
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(brglm2)
+
+#regional area vs solution
+
+
+crcdata$L_region <- as.factor(crcdata$L_region)
+
+crcdata$L_region_3 <- with(crcdata, case_when(
+  L_region %in% c("Europe", "Asia") ~ "EuropeAsia",
+  L_region %in% c("Global", "Middle East") ~ "GlobalME",
+  TRUE ~ "Other"
+))
+crcdata$L_region_3 <- factor(crcdata$L_region_3)
+crcdata$L_region_3 <- relevel(crcdata$L_region_3, ref = "Other")
+
+m_3 <- glm(solution_proposed_YN ~ L_region_3,
+           family = binomial, data = crcdata, method = "brglmFit")
+summary(m_3)
+
+```
+
+\newpage
+
+## ODDS RATIOS: Does the regional location of the study increase the likelihood of proposed/implemented solutions?
+
+## RESULTS: Compared to other regions, cases from Europe and Asia had 3.77 times higher odds of proposing a solution (95% CI [1.35, 10.48], p = .011). Global and Middle East cases also had higher odds (OR = 3.35, 95% CI [0.97, 11.57]), though this effect was marginal (p = .056).
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+exp(cbind(OR = coef(m_3), confint(m_3)))
+
+
+```
+
+\newpage
+
+## DECISON TREE: Region area Ensembed Decision Tree - Region area vs solution
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+#library(randomForest)
+library(caret)
+library(pROC)
+#library(ROCR)
+library(ranger)
+library(ggplot2)
+
+set.seed(2223)
+
+crcdata$solution_proposed_YN <- factor(crcdata$solution_proposed_YN, levels = c("N", "Y"))
+
+crcdata_OHE <- model.matrix(~ L_region - 1, data = crcdata)
+crcdata_omit <- na.omit(crcdata)
+crcdata_OHE2 <- data.frame(solution_proposed_YN = crcdata_omit$solution_proposed_YN, crcdata_OHE)
+
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+rf_weighted <- train(
+  solution_proposed_YN ~.,
+  data = crcdata_OHE2,
+  method = "ranger",
+  trControl = ctrl, 
+  tuneGrid = expand.grid(
+    mtry = 2,
+    splitrule = "gini",
+    min.node.size = c(20,30,40)
+  ),
+  num.trees = 1000,
+  importance = "impurity",
+  metric = "ROC"
+)
+
+#model results for printout:
+
+# ---- compact summary (one paragraph) ----
+best <- rf_weighted$bestTune
+res  <- rf_weighted$results
+for (nm in names(best)) res <- res[res[[nm]] == best[[nm]], ]
+
+auc_mean <- res$ROC[1]; auc_sd <- res$ROCSD[1]
+trees <- rf_weighted$finalModel$num.trees
+n <- nrow(rf_weighted$trainingData)
+cls <- table(rf_weighted$trainingData$.outcome)
+
+vi <- caret::varImp(rf_weighted, scale = TRUE)$importance
+vi$Feature <- rownames(vi)
+top3 <- paste(head(vi[order(-vi$Overall), "Feature"], 3), collapse = ", ")
+
+cat(sprintf("**Random forest (ranger).** %d trees; mtry=%d; min.node.size=%d; 5-fold CV.\n\n",
+            trees, best$mtry, best$min.node.size))
+cat(sprintf("**CV AUC:** %.3f (SD=%.3f).  **n:** %d.  **Class counts:** %s.\n\n",
+            auc_mean, auc_sd, n,
+            paste(sprintf("%s=%d", names(cls), as.integer(cls)), collapse=", ")))
+cat(sprintf("**Top features:** %s.\n", top3))
+
+
+
+
+
+
+## 1) In-sample AUC (on the training data)
+rf_probs <- predict(rf_weighted, newdata = crcdata_OHE2, type = "prob")[, "Y"]
+roc_train <- pROC::roc(crcdata_OHE2$solution_proposed_YN, rf_probs, levels = c("N","Y"))
+#auc(roc_train)
+
+## 2) Cross-validated AUC from caret's saved out-of-fold predictions
+## (works if you trained with savePredictions="final" in trainControl)
+
+stopifnot(!is.null(rf_weighted$pred))  # will error if you didn't save predictions
+
+cv_preds <- rf_weighted$pred
+
+## keep only rows for the selected hyperparameters
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv_preds <- cv_preds[cv_preds[[nm]] == bt[[nm]], ]
+
+roc_cv <- pROC::roc(cv_preds$obs, cv_preds$Y, levels = c("N","Y"))  # 'Y' column = P(class "Y")
+#auc(roc_cv)
+
+
+# Best hyperparameters chosen by caret
+#rf_weighted$bestTune
+#rf_weighted$results[order(-rf_weighted$results$ROC), ][, c("mtry","min.node.size","ROC","ROCSD")]
+
+# Out-of-fold predictions for the best hyperparameters only
+cv <- rf_weighted$pred
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv <- cv[cv[[nm]] == bt[[nm]], ]
+
+# CV AUC (preferred estimate)
+roc_cv <- pROC::roc(cv$obs, cv$Y, levels = c("N","Y"))
+#auc(roc_cv)
+
+#plot(roc_cv, print.auc = TRUE, main = "Cross-Validated ROC (caret, best tune)")
+
+# Assume roc_cv and roc_train already exist
+auc_train <- round(pROC::auc(roc_train), 3)
+auc_cv <- round(pROC::auc(roc_cv), 3)
+
+plot(roc_cv, col = "red", lwd = 2, lty = 2,
+     main = "Training vs CV ROC Curves")
+lines(roc_train, col = "blue", lwd = 2)
+grid()
+
+legend("bottomright",
+       legend = c(
+         paste("CV (out-of-fold) AUC =", auc_cv),
+         paste("Training AUC =", auc_train)
+       ),
+       col = c("red", "blue"),
+       lty = c(2, 1),
+       lwd = 2,
+       bty = "n")
+
+
+# 1) Get permutation importance from the fitted caret model
+vi <- varImp(rf_weighted, scale = FALSE)     # scale=TRUE rescales to [0,100]
+imp <- vi$importance
+imp$Feature <- rownames(imp)
+
+# 2) Keep the best-tuned model's importance and sort
+# (For binary classification, caret provides an "Overall" column)
+imp <- imp[order(-imp$Overall), ]
+top_n <- head(imp, 10)
+
+# 3) Pretty plot
+ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
+  geom_col(width = 0.7, fill = "blue") +
+  coord_flip() +
+  labs(
+    title = "Feature Importance",
+    x = "Feature",
+    y = "Feature Importance"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.margin = ggplot2::margin(5.5,12,5.5,5.5),
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(margin = margin(r = 8)),
+    axis.title.x = element_text(margin = margin(t = 8))
+  )
+
+
+
+
+
+
+#-----end new
+
+# library(randomForest)
+# library(caret)
+# set.seed(2223)
+# 
+# crcdata$solution_proposed_YN <- as.factor(crcdata$solution_proposed_YN)
+# levels(crcdata$solution_proposed_YN) = c("N", "Y")
+# 
+# ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+# crcdata$solution_implemented_YN <- as.factor(crcdata$solution_implemented_YN)
+# train <- crcdata[ind==1,]
+# test <- crcdata[ind==2,]
+# train <- na.omit(train)
+# test <- na.omit(test)
+# 
+# # One-hot encode L_region for training
+# X_train <- model.matrix(~ L_region - 1, data = train)
+# 
+# # One-hot encode L_region for testing
+# X_test <- model.matrix(~ L_region - 1, data = test)
+# 
+# # Combine predictors with the target variable
+# train <- data.frame(solution_proposed_YN = train$solution_proposed_YN, X_train)
+# test  <- data.frame(solution_proposed_YN = test$solution_proposed_YN, X_test)
+# 
+# # train and test currently look like:
+# # train <- data.frame(solution_proposed_YN = train$solution_proposed_YN, X_train)
+# # test  <- data.frame(solution_proposed_YN = test$solution_proposed_YN,  X_test)
+# 
+# # 1) Add any missing dummy columns to test (fill with 0)
+# miss_in_test <- setdiff(names(train), names(test))
+# miss_in_test <- setdiff(miss_in_test, "solution_proposed_YN")
+# for (nm in miss_in_test) test[[nm]] <- 0
+# 
+# # 2) Drop any extra columns in test that aren’t in train
+# extra_in_test <- setdiff(names(test), names(train))
+# if (length(extra_in_test)) test[extra_in_test] <- NULL
+# 
+# # 3) Reorder columns in test to match train (very important)
+# test <- test[, names(train)]
+# 
+# # 4) Sanity checks
+# stopifnot(identical(names(train), names(test)))
+# stopifnot(identical(levels(train$solution_proposed_YN), levels(test$solution_proposed_YN)))
+# 
+# 
+# rf <- randomForest(solution_proposed_YN ~., data=train, proximity=TRUE, importance=TRUE, ntree=1000,
+#   classwt = c(N = 1, Y = 10) ) 
+# 
+# print(rf)
+# 
+# p2 <- predict(rf, test)
+# 
+# confusionMatrix(p2, test$solution_proposed_YN)
+# 
+# hist(treesize(rf),
+#      main = "No. of Nodes for the Trees",
+#      col = "green")
+# 
+# # Gini (most stable)
+# varImpPlot(rf, type = 2, n.var = 1, main = "Top 10 - Variable Importance")
+# 
+# #varImpPlot(rf,main = "Top 10 - Variable Importance")
+# importance(rf)
+# 
+# library(ggplot2)
+# imp <- data.frame(Variable = rownames(importance(rf)), importance(rf))
+# ggplot(imp, aes(x = reorder(Variable, MeanDecreaseAccuracy), y = MeanDecreaseAccuracy)) +
+#   geom_col(fill = "steelblue") +
+#   coord_flip() +
+#   labs(
+#     title = "Random Forest Variable Importance",
+#     y = "Mean Decrease in Accuracy",
+#     x = "Region"
+#   ) +
+#   theme_minimal()
+# 
+# 
+# # Required libraries
+# library(randomForest)
+# library(ggplot2)
+# 
+# 
+# # Extract variable importance
+# var_imp <- importance(rf, type = 2)  # type = 2 is MeanDecreaseGini
+# var_imp_df <- data.frame(Variable = rownames(var_imp),
+#                          MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+# 
+# # Sort and select top 10
+# var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+# top_vars <- head(var_imp_df, 10)
+# 
+# # Plot
+# ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+#   geom_bar(stat = "identity", fill = "steelblue") +
+#   coord_flip() +
+#   labs(title = "Top 10 Variable Importance - Random Forest Model",
+#        x = "Variable", y = "Mean Decrease in Gini") +
+#   theme_minimal()
+
+
+```
+
+
+
+\newpage
+
+# Multivariate Stakeholder Engagement Modeling - geographic area
+
+## Regression Testing - stakeholder type vs geographic area - interactions and effects
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+geog_stakeholdertype <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~G_local+G_regional+G_national+G_multinational+G_global, data=crcdata)
+
+summary(geog_stakeholdertype)
+
+```
+
+\newpage
+
+# Multivariate Geographic Modeling - Ghodsvali
+
+## Regression Testing - Geographic area vs engagement (Ghodsvali) - interactions and effects
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+geog_engagement_ghodsvali <- lm(cbind(G_local,G_regional,G_national,G_multinational,G_global)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
+
+summary(geog_engagement_ghodsvali)
+
+```
+\newpage
+
+# ADDITIONAL ANALYSIS -  ALL VARIABLES 
+
+## Looking at Decision Tree for all variables - with Ghodsvali scale - with solution proposed as dependent variable
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+
+#library(randomForest)
+library(caret)
+library(pROC)
+#library(ROCR)
+library(ranger)
+library(ggplot2)
+
+set.seed(2223)
+
+crcdata$solution_proposed_YN <- factor(crcdata$solution_proposed_YN, levels = c("N", "Y"))
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+rf_weighted <- train(
+  solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio,
+  data = crcdata,
+  method = "ranger",
+  trControl = ctrl, 
+  tuneGrid = expand.grid(
+    mtry = 2,
+    splitrule = "gini",
+    min.node.size = c(20,30,40)
+  ),
+  num.trees = 1000,
+  importance = "impurity",
+  metric = "ROC"
+)
+
+#model results for printout:
+
+# ---- compact summary (one paragraph) ----
+best <- rf_weighted$bestTune
+res  <- rf_weighted$results
+for (nm in names(best)) res <- res[res[[nm]] == best[[nm]], ]
+
+auc_mean <- res$ROC[1]; auc_sd <- res$ROCSD[1]
+trees <- rf_weighted$finalModel$num.trees
+n <- nrow(rf_weighted$trainingData)
+cls <- table(rf_weighted$trainingData$.outcome)
+
+vi <- caret::varImp(rf_weighted, scale = TRUE)$importance
+vi$Feature <- rownames(vi)
+top3 <- paste(head(vi[order(-vi$Overall), "Feature"], 3), collapse = ", ")
+
+cat(sprintf("**Random forest (ranger).** %d trees; mtry=%d; min.node.size=%d; 5-fold CV.\n\n",
+            trees, best$mtry, best$min.node.size))
+cat(sprintf("**CV AUC:** %.3f (SD=%.3f).  **n:** %d.  **Class counts:** %s.\n\n",
+            auc_mean, auc_sd, n,
+            paste(sprintf("%s=%d", names(cls), as.integer(cls)), collapse=", ")))
+cat(sprintf("**Top features:** %s.\n", top3))
+
+
+
+
+
+
+## 1) In-sample AUC (on the training data)
+rf_probs <- predict(rf_weighted, newdata = crcdata, type = "prob")[, "Y"]
+roc_train <- pROC::roc(crcdata$solution_proposed_YN, rf_probs, levels = c("N","Y"))
+#auc(roc_train)
+
+## 2) Cross-validated AUC from caret's saved out-of-fold predictions
+## (works if you trained with savePredictions="final" in trainControl)
+
+stopifnot(!is.null(rf_weighted$pred))  # will error if you didn't save predictions
+
+cv_preds <- rf_weighted$pred
+
+## keep only rows for the selected hyperparameters
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv_preds <- cv_preds[cv_preds[[nm]] == bt[[nm]], ]
+
+roc_cv <- pROC::roc(cv_preds$obs, cv_preds$Y, levels = c("N","Y"))  # 'Y' column = P(class "Y")
+#auc(roc_cv)
+
+
+# Best hyperparameters chosen by caret
+#rf_weighted$bestTune
+#rf_weighted$results[order(-rf_weighted$results$ROC), ][, c("mtry","min.node.size","ROC","ROCSD")]
+
+# Out-of-fold predictions for the best hyperparameters only
+cv <- rf_weighted$pred
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv <- cv[cv[[nm]] == bt[[nm]], ]
+
+# CV AUC (preferred estimate)
+roc_cv <- pROC::roc(cv$obs, cv$Y, levels = c("N","Y"))
+#auc(roc_cv)
+
+#plot(roc_cv, print.auc = TRUE, main = "Cross-Validated ROC (caret, best tune)")
+
+# Assume roc_cv and roc_train already exist
+auc_train <- round(pROC::auc(roc_train), 3)
+auc_cv <- round(pROC::auc(roc_cv), 3)
+
+plot(roc_cv, col = "red", lwd = 2, lty = 2,
+     main = "Training vs CV ROC Curves")
+lines(roc_train, col = "blue", lwd = 2)
+grid()
+
+legend("bottomright",
+       legend = c(
+         paste("CV (out-of-fold) AUC =", auc_cv),
+         paste("Training AUC =", auc_train)
+       ),
+       col = c("red", "blue"),
+       lty = c(2, 1),
+       lwd = 2,
+       bty = "n")
+
+
+# 1) Get permutation importance from the fitted caret model
+vi <- varImp(rf_weighted, scale = FALSE)     # scale=TRUE rescales to [0,100]
+imp <- vi$importance
+imp$Feature <- rownames(imp)
+
+# 2) Keep the best-tuned model's importance and sort
+# (For binary classification, caret provides an "Overall" column)
+imp <- imp[order(-imp$Overall), ]
+top_n <- head(imp, 10)
+
+# 3) Pretty plot
+ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
+  geom_col(width = 0.7, fill = "blue") +
+  coord_flip() +
+  labs(
+    title = "Feature Importance",
+    x = "Feature",
+    y = "Feature Importance"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.margin = ggplot2::margin(5.5,12,5.5,5.5),
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(margin = margin(r = 8)),
+    axis.title.x = element_text(margin = margin(t = 8))
+  )
+
+
+
+
+
+
+#-----end new
+
+# library(randomForest)
+# library(caret)
+# set.seed(2223)
+# ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+# train <- crcdata[ind==1,]
+# test <- crcdata[ind==2,]
+# rf <- randomForest(solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio, data=train, proximity=TRUE, importance=TRUE) 
+# print(rf)
+# 
+# 
+# #----new model on data where there is no solution proposed
+# 
+# hist(treesize(rf),
+#      main = "Balanced Model - No. of Nodes for the Trees",
+#      col = "green")
+# varImpPlot(rf,
+#            main = "Balanced Model - Top 10 - Variable Importance")
+# importance(rf)
+# 
+# #--
+# 
+# # Required libraries
+# library(randomForest)
+# library(ggplot2)
+# 
+# 
+# # Extract variable importance
+# var_imp <- importance(rf, type = 2)  # type = 2 is MeanDecreaseGini
+# var_imp_df <- data.frame(Variable = rownames(var_imp),
+#                          MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+# 
+# # Sort and select top 10
+# var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+# top_vars <- head(var_imp_df, 10)
+# 
+# # Plot
+# ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+#   geom_bar(stat = "identity", fill = "steelblue") +
+#   coord_flip() +
+#   labs(title = "Top 10 Variable Importance - Random Forest Model",
+#        x = "Variable", y = "Mean Decrease in Gini") +
+#   theme_minimal()
+# 
+
+```
+
+\newpage
+
+# ADDITIONAL ANALYSIS -  ALL VARIABLES - minus scaling
+
+## Looking at Decision Tree for all variables - minus the Ghodsvali scale - with solution proposed as dependent variable
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#RF scales
+
+
+
+#library(randomForest)
+library(caret)
+library(pROC)
+#library(ROCR)
+library(ranger)
+library(ggplot2)
+
+set.seed(2223)
+
+crcdata$solution_proposed_YN <- factor(crcdata$solution_proposed_YN, levels = c("N", "Y"))
+
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  classProbs = TRUE,
+  summaryFunction = twoClassSummary,
+  savePredictions = "final"
+)
+
+rf_weighted <- train(
+  solution_proposed_YN ~ST_combined_gov+ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio,
+  data = crcdata,
+  method = "ranger",
+  trControl = ctrl, 
+  tuneGrid = expand.grid(
+    mtry = 2,
+    splitrule = "gini",
+    min.node.size = c(20,30,40)
+  ),
+  num.trees = 1000,
+  importance = "impurity",
+  metric = "ROC"
+)
+
+#model results for printout:
+
+# ---- compact summary (one paragraph) ----
+best <- rf_weighted$bestTune
+res  <- rf_weighted$results
+for (nm in names(best)) res <- res[res[[nm]] == best[[nm]], ]
+
+auc_mean <- res$ROC[1]; auc_sd <- res$ROCSD[1]
+trees <- rf_weighted$finalModel$num.trees
+n <- nrow(rf_weighted$trainingData)
+cls <- table(rf_weighted$trainingData$.outcome)
+
+vi <- caret::varImp(rf_weighted, scale = TRUE)$importance
+vi$Feature <- rownames(vi)
+top3 <- paste(head(vi[order(-vi$Overall), "Feature"], 3), collapse = ", ")
+
+cat(sprintf("**Random forest (ranger).** %d trees; mtry=%d; min.node.size=%d; 5-fold CV.\n\n",
+            trees, best$mtry, best$min.node.size))
+cat(sprintf("**CV AUC:** %.3f (SD=%.3f).  **n:** %d.  **Class counts:** %s.\n\n",
+            auc_mean, auc_sd, n,
+            paste(sprintf("%s=%d", names(cls), as.integer(cls)), collapse=", ")))
+cat(sprintf("**Top features:** %s.\n", top3))
+
+
+
+
+
+
+## 1) In-sample AUC (on the training data)
+rf_probs <- predict(rf_weighted, newdata = crcdata, type = "prob")[, "Y"]
+roc_train <- pROC::roc(crcdata$solution_proposed_YN, rf_probs, levels = c("N","Y"))
+#auc(roc_train)
+
+## 2) Cross-validated AUC from caret's saved out-of-fold predictions
+## (works if you trained with savePredictions="final" in trainControl)
+
+stopifnot(!is.null(rf_weighted$pred))  # will error if you didn't save predictions
+
+cv_preds <- rf_weighted$pred
+
+## keep only rows for the selected hyperparameters
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv_preds <- cv_preds[cv_preds[[nm]] == bt[[nm]], ]
+
+roc_cv <- pROC::roc(cv_preds$obs, cv_preds$Y, levels = c("N","Y"))  # 'Y' column = P(class "Y")
+#auc(roc_cv)
+
+
+# Best hyperparameters chosen by caret
+#rf_weighted$bestTune
+#rf_weighted$results[order(-rf_weighted$results$ROC), ][, c("mtry","min.node.size","ROC","ROCSD")]
+
+# Out-of-fold predictions for the best hyperparameters only
+cv <- rf_weighted$pred
+bt <- rf_weighted$bestTune
+for (nm in names(bt)) cv <- cv[cv[[nm]] == bt[[nm]], ]
+
+# CV AUC (preferred estimate)
+roc_cv <- pROC::roc(cv$obs, cv$Y, levels = c("N","Y"))
+#auc(roc_cv)
+
+#plot(roc_cv, print.auc = TRUE, main = "Cross-Validated ROC (caret, best tune)")
+
+# Assume roc_cv and roc_train already exist
+auc_train <- round(pROC::auc(roc_train), 3)
+auc_cv <- round(pROC::auc(roc_cv), 3)
+
+plot(roc_cv, col = "red", lwd = 2, lty = 2,
+     main = "Training vs CV ROC Curves")
+lines(roc_train, col = "blue", lwd = 2)
+grid()
+
+legend("bottomright",
+       legend = c(
+         paste("CV (out-of-fold) AUC =", auc_cv),
+         paste("Training AUC =", auc_train)
+       ),
+       col = c("red", "blue"),
+       lty = c(2, 1),
+       lwd = 2,
+       bty = "n")
+
+
+# 1) Get permutation importance from the fitted caret model
+vi <- varImp(rf_weighted, scale = FALSE)     # scale=TRUE rescales to [0,100]
+imp <- vi$importance
+imp$Feature <- rownames(imp)
+
+# 2) Keep the best-tuned model's importance and sort
+# (For binary classification, caret provides an "Overall" column)
+imp <- imp[order(-imp$Overall), ]
+top_n <- head(imp, 10)
+
+# 3) Pretty plot
+ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
+  geom_col(width = 0.7, fill = "blue") +
+  coord_flip() +
+  labs(
+    title = "Feature Importance",
+    x = "Feature",
+    y = "Feature Importance"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.margin = ggplot2::margin(5.5,12,5.5,5.5),
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(margin = margin(r = 8)),
+    axis.title.x = element_text(margin = margin(t = 8))
+  )
+
+#---new
+
+
+
+# library(randomForest)
+# library(caret)
+# set.seed(2223)
+# ind <- sample(2, nrow(crcdata), replace = TRUE, prob = c(0.7, 0.3))
+# train <- crcdata[ind==1,]
+# test <- crcdata[ind==2,]
+# rf <- randomForest(solution_proposed_YN ~ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio, data=train, proximity=TRUE, importance=TRUE) 
+# print(rf)
+# 
+# 
+# #----new model on data where there is no solution proposed
+# 
+# hist(treesize(rf),
+#      main = "Balanced Model - No. of Nodes for the Trees",
+#      col = "green")
+# varImpPlot(rf,
+#            main = "Balanced Model - Top 10 - Variable Importance")
+# importance(rf)
+# 
+# 
+# # Extract variable importance
+# var_imp <- importance(rf, type = 2)  # type = 2 is MeanDecreaseGini
+# var_imp_df <- data.frame(Variable = rownames(var_imp),
+#                          MeanDecreaseGini = var_imp[, "MeanDecreaseGini"])
+# 
+# # Sort and select top 10
+# var_imp_df <- var_imp_df[order(-var_imp_df$MeanDecreaseGini), ]
+# top_vars <- head(var_imp_df, 10)
+# 
+# # Plot
+# ggplot(top_vars, aes(x = reorder(Variable, MeanDecreaseGini), y = MeanDecreaseGini)) +
+#   geom_bar(stat = "identity", fill = "steelblue") +
+#   coord_flip() +
+#   labs(title = "Top 10 Variable Importance - Random Forest Model",
+#        x = "Variable", y = "Mean Decrease in Gini") +
+#   theme_minimal()
+
+```
+\newpage
+
+## Representative Decision Tree Plot - Balanced Model - Minus Scaling
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+
+library(rpart)
+library(rpart.plot)
+
+# # Make sure your response is a factor for classification
+# crcdata$solution_proposed_YN <- as.factor(crcdata$solution_proposed_YN)
+# 
+# # Fit a decision tree using rpart
+# tree_model <- rpart(
+#   solution_proposed_YN ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
+#     ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
+#     ST_experts + G_local + G_regional + G_national + G_multinational +
+#     G_global + year + L_region_3 + ST_ratio,
+#   data = crcdata,
+#   method = "class",  # use "anova" for regression
+#   control = rpart.control(cp = 0, minsplit = 2, maxdepth = 5)
+# )
+# 
+# # Plot the tree
+# rpart.plot(tree_model)
+
+
+
+library(rpart)
+library(rpart.plot)
+
+probs <- predict(rf_weighted, newdata = crcdata, type = "prob")
+pos   <- if ("Y" %in% colnames(probs)) "Y" else colnames(probs)[2]
+pY    <- probs[[pos]]
+
+tree_model <- rpart(
+  pY ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
+    ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
+    ST_experts + G_local + G_regional + G_national + G_multinational +
+    G_global + year + L_region_3 + ST_ratio,
+  data   = crcdata,
+  method = "anova",
+  control = rpart.control(cp = 0.001, minbucket = 15, maxdepth = 4)
+)
+
+rpart.plot(tree_model, type = 2, extra = 1, under = TRUE,
+           fallen.leaves = TRUE, faclen = 0, digits = 3, box.palette = "GnBu",
+           main = "Representative Tree")
+
+# Fidelity to forest probs (lower Brier is better)
+mean((predict(tree_model, crcdata) - pY)^2)
+
+
+```
+
+
+
+
+
