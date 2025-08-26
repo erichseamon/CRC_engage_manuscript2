@@ -642,7 +642,7 @@ ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
 
 # Stakeholder Engagement Modeling - solution proposed
 
-## QUESTION: Does engaging stakeholders increase the likelihood that a solution will be proposed/implemented?
+## REGRESSION: Does engaging stakeholders increase the likelihood that a solution will be proposed/implemented?
 
 Here we use classical logistic regression using a binomial function to determine if engaging stakeholders (Y/N) increases the odds that a solution will be proposed.
 
@@ -678,9 +678,9 @@ logistic.display(stakeholder_vs_solutions)
 
 \newpage
 
-## Diversity of stakeholders vs solution
+# Diversity of stakeholders vs solution
 
-## QUESTION: Does the diversity of stakeholders increase the likelihood that a solution will be proposed?
+## REGRESSION: Does the diversity of stakeholders increase the likelihood that a solution will be proposed?
 
 Regression testing of whether Diversity of stakeholders predicts if a solution was proposed (Y/N).  In order to represent diversity, we have used a simple ratio calcuation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
 
@@ -708,10 +708,11 @@ summary(stratio_vs_solutions)
 logistic.display(stratio_vs_solutions)
 
 ```
+\newpage
 
-## QUESTION: If diversity of stakeholders does not increase proposing/implementing solutions, which stakeholders are more associated with proposing/implementing solutions?
+## REGRESSION: If diversity of stakeholders does not increase proposing/implementing solutions, which stakeholders are more associated with proposing/implementing solutions?
 
-Regression testing for diversity of stakeholders used to predict whether a solution was proposed
+Regression testing for which stakeholders predict whether a solution was proposed
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -725,10 +726,11 @@ summary(stratio_vs_solutions)
 
 ```
 
+\newpage
 
-## ODDS RATIOS: Diversity of stakeholders vs solution
+## ODDS RATIOS: stakeholders vs solution
 
-Odds whether Diversity of stakeholders predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of stakeholders involved divided by the total number of possible stakeholder options.  A ratio which is closer to 1 has a greater level of stakeholder diversity.
+Odds whether a specific stakeholder predicts if a solution was proposed (Y/N). 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -741,7 +743,9 @@ logistic.display(stratio_vs_solutions)
 
 ```
 
-## DECISION TREE: Ensembed Decision Tree - Diversity of stakeholders vs solution -->
+\newpage
+
+## DECISION TREE: Ensembed Decision Tree - stakeholders vs solution
 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
@@ -953,7 +957,7 @@ ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
 
 # Researcher Modeling - solution proposed
 
-## QUESTION: Does researcher type increase the likelihood that a solution will be proposed?
+## REGRESSION: Does researcher type increase the likelihood that a solution will be proposed?
 
 Regression of whether researcher type predicts if a solution was proposed (Y/N). 
 
@@ -1220,7 +1224,7 @@ ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
 
 # Researcher Diversity Modeling - solution proposed
 
-## QUESTION: Does the diversity of researchers increases the likelihood that a solution will be proposed?
+## REGRESSION: Does the diversity of researchers increases the likelihood that a solution will be proposed?
 
 Regression of whether Diversity of researchers predicts if a solution was proposed (Y/N). In order to represent diversity, we have used a simple ratio calculation which sums the number of researcher types involved, divided by the total number of possible researcher options.  A ratio which is closer to 1 has a greater level of researcher diversity.
 
@@ -1229,9 +1233,9 @@ Regression of whether Diversity of researchers predicts if a solution was propos
 #Diversity of researchers vs solutions (using ratio)
 
 
-crcdata$ST_ratio <- rowSums(crcdata[,12:21])/10
+crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
 
-rratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
+rratio_vs_solutions <-glm(solution_proposed_YN ~ R_ratio,family=binomial,data=crcdata)
 
 summary(rratio_vs_solutions)
 #logistic.display(rratio_vs_solutions)
@@ -1250,9 +1254,9 @@ Odds of whether Diversity of researchers predicts if a solution was proposed (Y/
 #Diversity of researchers vs solutions (using ratio)
 
 
-crcdata$ST_ratio <- rowSums(crcdata[,12:21])/10
+crcdata$R_ratio <- rowSums(crcdata[,12:21])/10
 
-rratio_vs_solutions <-glm(solution_proposed_YN ~ ST_ratio,family=binomial,data=crcdata)
+rratio_vs_solutions <-glm(solution_proposed_YN ~ R_ratio,family=binomial,data=crcdata)
 
 #summary(rratio_vs_solutions)
 logistic.display(rratio_vs_solutions)
@@ -1295,7 +1299,7 @@ summary(ST_solution)
 
 # Geographic Location Modeling - solution proposed
 
-## QUESTION: Does the geographic location of the study increase the likelihood of proposed/implemented solutions?
+## REGRESSION: Does the geographic location of the study increase the likelihood of proposed/implemented solutions?
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1558,9 +1562,9 @@ ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
 
 # Regional Location Modeling - solution proposed
 
-## QUESTION: Does the regional location of the study increase the likelihood of proposed/implemented solutions? Regions were grouped in: Europe/Asia, Middle East/Global - and Other.
+## REGRESSION: Does the regional location of the study increase the likelihood of proposed/implemented solutions? 
 
-## RESULTS: A bias-reduced logistic regression indicated that region was significantly associated with whether a solution was proposed, Chisquare = 7.28, p = .026. 
+Regions were grouped in: Europe/Asia, Middle East/Global - and Other.  Results of this bias-reduced logistic regression indicate that region was significantly associated with whether a solution was proposed, Chisquare = 7.28, p = .026. 
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 library(brglm2)
@@ -1586,9 +1590,9 @@ summary(m_3)
 
 \newpage
 
-## ODDS RATIOS: Does the regional location of the study increase the likelihood of proposed/implemented solutions?
+## ODDS RATIOS: Does the regional location of the study increase the likelihood of proposed/implemented solutions? 
 
-## RESULTS: Compared to other regions, cases from Europe and Asia had 3.77 times higher odds of proposing a solution (95% CI [1.35, 10.48], p = .011). Global and Middle East cases also had higher odds (OR = 3.35, 95% CI [0.97, 11.57]), though this effect was marginal (p = .056).
+Compared to other regions, cases from Europe and Asia had 3.77 times higher odds of proposing a solution (95% CI [1.35, 10.48], p = .011). Global and Middle East cases also had higher odds (OR = 3.35, 95% CI [0.97, 11.57]), though this effect was marginal (p = .056).
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1869,40 +1873,40 @@ ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
 
 \newpage
 
-# Multivariate Stakeholder Engagement Modeling - geographic area
+<!-- # Multivariate Stakeholder Engagement Modeling - geographic area -->
 
-## Regression Testing - stakeholder type vs geographic area - interactions and effects
-
-```{r echo=FALSE, warning=FALSE, message=FALSE}
-
-#geographic area vs solution
-
-geog_stakeholdertype <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~G_local+G_regional+G_national+G_multinational+G_global, data=crcdata)
-
-summary(geog_stakeholdertype)
-
-```
-
-\newpage
-
-# Multivariate Geographic Modeling - Ghodsvali
-
-## Regression Testing - Geographic area vs engagement (Ghodsvali) - interactions and effects
+<!-- ## Regression Testing - stakeholder type vs geographic area - interactions and effects -->
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
 #geographic area vs solution
 
-geog_engagement_ghodsvali <- lm(cbind(G_local,G_regional,G_national,G_multinational,G_global)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
+# geog_stakeholdertype <- lm(cbind(ST_farmers,ST_combined_gov,ST_tribal,ST_combined_coalition,ST_combined_industry,ST_migrants,ST_youth,ST_public,ST_university,ST_experts)~G_local+G_regional+G_national+G_multinational+G_global, data=crcdata)
+# 
+# summary(geog_stakeholdertype)
 
-summary(geog_engagement_ghodsvali)
+```
+
+\newpage
+
+<!-- # Multivariate Geographic Modeling - Ghodsvali -->
+
+<!-- ## Regression Testing - Geographic area vs engagement (Ghodsvali) - interactions and effects -->
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+
+#geographic area vs solution
+
+# geog_engagement_ghodsvali <- lm(cbind(G_local,G_regional,G_national,G_multinational,G_global)~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative, data=crcdata)
+# 
+# summary(geog_engagement_ghodsvali)
 
 ```
 \newpage
 
-# ADDITIONAL ANALYSIS -  ALL VARIABLES 
+# DECISION TREE ANALYSIS - ALL VARIABLES 
 
-## Looking at Decision Tree for all variables - with Ghodsvali scale - with solution proposed as dependent variable
+## Looking at Decision Tree for all variables, including the Ghodsvali scale - with solution proposed as dependent variable
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 
@@ -1929,7 +1933,7 @@ ctrl <- trainControl(
 )
 
 rf_weighted <- train(
-  solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio,
+  solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio+R_ratio,
   data = crcdata,
   method = "ranger",
   trControl = ctrl, 
@@ -2108,7 +2112,7 @@ ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
 
 \newpage
 
-# ADDITIONAL ANALYSIS -  ALL VARIABLES - minus scaling
+# DECISION TREE ANALYSIS - ALL VARIABLES - minus scaling
 
 ## Looking at Decision Tree for all variables - minus the Ghodsvali scale - with solution proposed as dependent variable
 
@@ -2138,7 +2142,7 @@ ctrl <- trainControl(
 )
 
 rf_weighted <- train(
-  solution_proposed_YN ~ST_combined_gov+ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio,
+  solution_proposed_YN ~ST_combined_gov+ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio+R_ratio,
   data = crcdata,
   method = "ranger",
   trControl = ctrl, 
@@ -2344,7 +2348,7 @@ tree_model <- rpart(
   pY ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
     ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
     ST_experts + G_local + G_regional + G_national + G_multinational +
-    G_global + year + L_region_3 + ST_ratio,
+    G_global + year + L_region_3 + ST_ratio+R_ratio,
   data   = crcdata,
   method = "anova",
   control = rpart.control(cp = 0.001, minbucket = 15, maxdepth = 4)
