@@ -1932,11 +1932,29 @@ ctrl <- trainControl(
   savePredictions = "final"
 )
 
+# 
+# rf_weighted <- train(
+#   solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio+R_ratio,
+#   data = crcdata,
+#   method = "ranger",
+#   trControl = ctrl, 
+#   tuneGrid = expand.grid(
+#     mtry = 2,
+#     splitrule = "gini",
+#     min.node.size = c(20,30,40)
+#   ),
+#   num.trees = 1000,
+#   importance = "impurity",
+#   metric = "ROC"
+# )
+
+
+
 rf_weighted <- train(
-  solution_proposed_YN ~STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio+R_ratio,
+  solution_proposed_YN ~R_ngo+R_eng+R_math+R_compsci+R_phys+R_interdis+R_socsci+R_economics+R_ag+R_other+STE_G_nominal+STE_G_instrumental+STE_G_representation+STE_G_transformative+ST_combined_gov+           ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio+R_ratio,
   data = crcdata,
   method = "ranger",
-  trControl = ctrl, 
+  trControl = ctrl,
   tuneGrid = expand.grid(
     mtry = 2,
     splitrule = "gini",
@@ -2038,7 +2056,7 @@ imp$Feature <- rownames(imp)
 # 2) Keep the best-tuned model's importance and sort
 # (For binary classification, caret provides an "Overall" column)
 imp <- imp[order(-imp$Overall), ]
-top_n <- head(imp, 10)
+top_n <- head(imp, 20)
 
 # 3) Pretty plot
 ggplot(top_n, aes(x = reorder(Feature, Overall), y = Overall)) +
@@ -2142,7 +2160,7 @@ ctrl <- trainControl(
 )
 
 rf_weighted <- train(
-  solution_proposed_YN ~ST_combined_gov+ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio+R_ratio,
+  solution_proposed_YN ~R_ngo+R_eng+R_math+R_compsci+R_phys+R_interdis+R_socsci+R_economics+R_ag+R_other+ST_combined_gov+ST_tribal+ST_combined_coalition+ST_combined_industry+ST_migrants+ST_youth+ST_public+ST_university+ST_experts+G_local+G_regional+G_national+G_multinational+G_global+year+L_region_3+ST_ratio+R_ratio,
   data = crcdata,
   method = "ranger",
   trControl = ctrl, 
@@ -2345,7 +2363,7 @@ pos   <- if ("Y" %in% colnames(probs)) "Y" else colnames(probs)[2]
 pY    <- probs[[pos]]
 
 tree_model <- rpart(
-  pY ~ ST_combined_gov + ST_tribal + ST_combined_coalition +
+  pY ~ R_ngo+R_eng+R_math+R_compsci+R_phys+R_interdis+R_socsci+R_economics+R_ag+R_other+ST_combined_gov + ST_tribal + ST_combined_coalition +
     ST_combined_industry + ST_migrants + ST_youth + ST_public + ST_university +
     ST_experts + G_local + G_regional + G_national + G_multinational +
     G_global + year + L_region_3 + ST_ratio+R_ratio,
